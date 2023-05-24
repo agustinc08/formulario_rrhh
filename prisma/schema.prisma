@@ -1,0 +1,110 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Tabla Pregunta
+model Pregunta {
+  id                   Int          @id @default(autoincrement())
+  descripcion          String
+  tieneComentario      Boolean      @default(false)
+  tieneExpresion       Boolean      @default(false)
+  tieneCalificaciones  Boolean      @default(false)
+  tieneClasificaciones Boolean      @default(false)
+  tieneGrado           Boolean      @default(false)
+  respuestas           Respuesta[]
+  seccion              Seccion?     @relation(fields: [seccionId], references: [id])
+  seccionId            Int?
+}
+
+model Seccion {
+  id            Int         @id @default(autoincrement())
+  descripcion   String
+  preguntas     Pregunta[]
+}
+
+// Tabla Respuesta
+model Respuesta {
+  id            Int           @id @default(autoincrement())
+  createdAt     DateTime      @default(now())
+  dependenciaId Int
+  dependencia   Dependencia   @relation(fields: [dependenciaId], references: [id])
+  edad          Edad
+  genero        Genero
+  expresion     RespuestaExpresionEnum?
+  calificaciones RespuestaCalificacionEnum?
+  clasificaciones RespuestaClasificacionEnum?
+  grado         RespuestaGradoEnum?
+  preguntaId    Int
+  pregunta      Pregunta      @relation(fields: [preguntaId], references: [id])
+  comentarios   Comentario[]
+}
+
+// Tabla Comentario
+model Comentario {
+  id          Int         @id @default(autoincrement())
+  comentario  String
+  respuestaId Int
+  respuesta   Respuesta   @relation(fields: [respuestaId], references: [id])
+}
+
+
+// Tabla Dependencia
+model Dependencia {
+  id                Int          @id @default(autoincrement())
+  nombreDependencia String
+  respuestas        Respuesta[]
+  claves             Clave?
+}
+
+// Tabla Clave
+model Clave {
+  id            Int         @id @default(autoincrement())
+  dependencia   Dependencia @relation(fields: [dependenciaId], references: [id])
+  dependenciaId Int         @unique
+  clave         String
+}
+
+enum Genero {
+  MASCULINO
+  FEMENINO
+  OTRO
+}
+
+enum Edad {
+  DESDE_15_A_45
+  MAS_45
+}
+
+enum RespuestaExpresionEnum {
+  SI
+  NO
+  NO_SE
+}
+
+enum RespuestaGradoEnum {
+  ALTA
+  MEDIA
+  BAJA
+}
+
+enum RespuestaClasificacionEnum {
+ SIEMPRE 
+ CASI_SIEMPRE 
+ AVECES
+ CASI_NUNCA
+ NUNCA
+}
+
+enum RespuestaCalificacionEnum {
+ BUENO 
+ MUY_BUENO 
+ REGULAR
+ MALO
+ MUY_MALO
+}
+
