@@ -48,6 +48,7 @@ model Respuesta {
 // Tabla Comentario
 model Comentario {
   id          Int         @id @default(autoincrement())
+  descripcion String?
   comentario  String
   preguntaId      Int?       // Campo opcional para ligar con Pregunta
   pregunta        Pregunta?  @relation(fields: [preguntaId], references: [id])
