@@ -82,7 +82,7 @@ enum Genero {
 }
 
 enum Edad {
-  DESDE_15_A_45
+  DESDE_18_A_45
   MAS_45
 }
 
