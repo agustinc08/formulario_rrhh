@@ -55,6 +55,7 @@ export class RespuestasService {
             create: [
               {
                 comentario,
+                dependenciaId
               },
             ],
           };

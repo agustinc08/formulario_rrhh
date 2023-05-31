@@ -19,6 +19,7 @@ model Pregunta {
   respuestas           Respuesta[]
   seccion              Seccion?     @relation(fields: [seccionId], references: [id])
   seccionId            Int?
+  comentarios          Comentario[]
 }
 
 model Seccion {
@@ -48,8 +49,12 @@ model Respuesta {
 model Comentario {
   id          Int         @id @default(autoincrement())
   comentario  String
+  preguntaId      Int?       // Campo opcional para ligar con Pregunta
+  pregunta        Pregunta?  @relation(fields: [preguntaId], references: [id])
   respuestaId Int
   respuesta   Respuesta   @relation(fields: [respuestaId], references: [id])
+  dependencia   Dependencia @relation(fields: [dependenciaId], references: [id])
+  dependenciaId Int        
 }
 
 
@@ -59,6 +64,7 @@ model Dependencia {
   nombreDependencia String
   respuestas        Respuesta[]
   claves             Clave?
+  comentarios   Comentario[]
 }
 
 // Tabla Clave

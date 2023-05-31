@@ -10,4 +10,7 @@ export class CreateComentarioDto {
 
   @IsNotEmpty()
   respuestaId: number;
+
+  @IsNotEmpty()
+  dependenciaId: number;
 }
