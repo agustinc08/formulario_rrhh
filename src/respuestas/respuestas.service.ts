@@ -7,12 +7,12 @@ import { PrismaService } from 'src/prisma.service';
 export class RespuestasService {
   constructor(private prisma: PrismaService) {}
 
-  async createRespuesta(createRespuestaDto: CreateRespuestaDto) {
-    const { respuestas, edad, genero } = createRespuestaDto;
-  
+   async createRespuesta(createRespuestaDto: CreateRespuestaDto) {
     try {
+      const { respuestas, edad, genero } = createRespuestaDto;
+  
       const respuestaPromises = respuestas.map(async (respuesta) => {
-        const { preguntaId, dependenciaId, respuesta: respuestaText, comentario } = respuesta;
+        const { preguntaId, dependenciaId, respuestaText, comentario } = respuesta;
   
         let respuestaExpresion: RespuestaExpresionEnum | undefined;
         let respuestaCalificacion: RespuestaCalificacionEnum | undefined;
@@ -34,10 +34,22 @@ export class RespuestasService {
           dependencia: { connect: { id: dependenciaId } },
           edad,
           genero,
-          pregunta: { connect: { id: preguntaId } },
+          pregunta: { connect: { id: preguntaId } }, // Use the converted id
         };
   
-        
+        if (respuestaExpresion) {
+          respuestaData.expresion = respuestaExpresion;
+        }
+        if (respuestaCalificacion) {
+          respuestaData.calificaciones = respuestaCalificacion;
+        }
+        if (respuestaClasificacion) {
+          respuestaData.clasificaciones = respuestaClasificacion;
+        }
+        if (respuestaGrado) {
+          respuestaData.grado = respuestaGrado;
+        }
+  
         if (comentario !== null) {
           comentarios = {
             create: [
