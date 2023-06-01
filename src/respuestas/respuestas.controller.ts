@@ -14,6 +14,24 @@ export class RespuestaController {
     return this.respuestaService.createRespuesta(createRespuestaDto);
   }
 
+  @Get('pregunta/:preguntaId')
+  async getRespuestasByPreguntaId(
+    @Param('preguntaId') preguntaId: string,
+  ): Promise<Respuesta[]> {
+    return this.respuestaService.getRespuestasByPreguntaId(
+      parseInt(preguntaId),
+    );
+  }
+
+  @Get('dependencia/:dependenciaId')
+  async getRespuestasByDependenciaId(
+    @Param('dependenciaId') dependenciaId: string,
+  ): Promise<Respuesta[]> {
+    return this.respuestaService.getRespuestasByDependenciaId(
+      parseInt(dependenciaId),
+    );
+  }
+
   @Get(':preguntaId/:dependenciaId')
   async buscarRespuestas(
     @Param('preguntaId') preguntaId: string,

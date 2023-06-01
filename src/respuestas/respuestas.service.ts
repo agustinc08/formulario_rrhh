@@ -94,6 +94,22 @@ export class RespuestasService {
     });
   }
 
+  async getRespuestasByPreguntaId(preguntaId: number): Promise<Respuesta[]> {
+    return this.prisma.respuesta.findMany({
+      where: {
+        preguntaId: preguntaId,
+      },
+    });
+  }
+
+  async getRespuestasByDependenciaId(dependenciaId: number): Promise<Respuesta[]> {
+    return this.prisma.respuesta.findMany({
+      where: {
+        dependenciaId: dependenciaId,
+      },
+    });
+  }
+
   async findAll(): Promise<Respuesta[]> {
     const respuestas = await this.prisma.respuesta.findMany({
       include: {
