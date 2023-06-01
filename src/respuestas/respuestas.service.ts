@@ -80,6 +80,18 @@ export class RespuestasService {
     }
   }
 
+  async buscarRespuestas(preguntaId: number, dependenciaId: number): Promise<Respuesta[]> {
+    return this.prisma.respuesta.findMany({
+      where: {
+        preguntaId,
+        dependenciaId,
+      },
+      include: {
+        comentarios: true, // Carga los comentarios asociados a cada respuesta
+      },
+    });
+  }
+
   async findAll(): Promise<Respuesta[]> {
     const respuestas = await this.prisma.respuesta.findMany({
       include: {
@@ -89,17 +101,15 @@ export class RespuestasService {
     return respuestas;
   }
 
-  async findOne(id: number): Promise<Respuesta> {
-    const respuesta = await this.prisma.respuesta.findUnique({
-      where: { id },
-      include: {
-        comentarios: true,
-      },
-    });
-    return respuesta;
-  }
-
- 
+  // async findOne(id: number): Promise<Respuesta> {
+  //   const respuesta = await this.prisma.respuesta.findUnique({
+  //     where: { id },
+  //     include: {
+  //       comentarios: true,
+  //     },
+  //   });
+  //   return respuesta;
+  // }
 
   async remove(id: number): Promise<Respuesta> {
     const deletedRespuesta = await this.prisma.respuesta.delete({
@@ -107,4 +117,7 @@ export class RespuestasService {
     });
     return deletedRespuesta;
   }
+
+ 
+
 }
