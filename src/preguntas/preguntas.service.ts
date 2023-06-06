@@ -8,10 +8,11 @@ export class PreguntasService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createPreguntaDto: CreatePreguntaDto) {
-    const { descripcion } = createPreguntaDto;
+    const { descripcion, seccionId } = createPreguntaDto;
     return this.prisma.pregunta.create({
       data: {
         descripcion,
+        seccionId, // Agregar el campo seccionId en los datos
       },
     });
   }
