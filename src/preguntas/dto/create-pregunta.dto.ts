@@ -7,4 +7,14 @@ export class CreatePreguntaDto {
   @IsNotEmpty()
   @IsInt()
   seccionId: number;
+
+  tieneComentario: boolean
+
+  tieneExpresion: boolean
+
+  tieneCalificaciones: boolean
+
+  tieneClasificaciones: boolean
+
+  tieneGrado: boolean
 }

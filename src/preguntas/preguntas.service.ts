@@ -5,14 +5,27 @@ import { UpdatePreguntaDto } from './dto/update-pregunta.dto';
 
 @Injectable()
 export class PreguntasService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async create(createPreguntaDto: CreatePreguntaDto) {
-    const { descripcion, seccionId } = createPreguntaDto;
+    const {
+      descripcion,
+      seccionId,
+      tieneComentario,
+      tieneExpresion,
+      tieneCalificaciones,
+      tieneClasificaciones,
+      tieneGrado
+    } = createPreguntaDto;
     return this.prisma.pregunta.create({
       data: {
         descripcion,
         seccionId, // Agregar el campo seccionId en los datos
+        tieneComentario,
+        tieneExpresion,
+        tieneCalificaciones,
+        tieneClasificaciones,
+        tieneGrado
       },
     });
   }
@@ -27,8 +40,8 @@ export class PreguntasService {
     return this.prisma.pregunta.findMany({
       include: {
         respuestas: {
-          include:{
-            comentarios : true
+          include: {
+            comentarios: true
           }
         }
       },
@@ -42,8 +55,8 @@ export class PreguntasService {
       },
       include: {
         respuestas: {
-          include:{
-            comentarios : true
+          include: {
+            comentarios: true
           }
         }
       },
