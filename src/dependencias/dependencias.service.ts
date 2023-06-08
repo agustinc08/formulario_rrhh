@@ -11,6 +11,7 @@ export class DependenciasService {
   async create(createDependenciaDto: CreateDependenciaDto): Promise<Dependencia> {
     const data: Prisma.DependenciaCreateInput = {
       nombreDependencia: createDependenciaDto.nombreDependencia,
+      rol : createDependenciaDto.rol
     };
     const dependencia = await this.prisma.dependencia.create({ data });
     return dependencia;
