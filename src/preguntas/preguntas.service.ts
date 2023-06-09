@@ -12,6 +12,7 @@ export class PreguntasService {
       descripcion,
       seccionId,
       tieneComentario,
+      descripcionComentario,
       tieneExpresion,
       tieneCalificaciones,
       tieneClasificaciones,
@@ -22,6 +23,7 @@ export class PreguntasService {
         descripcion,
         seccionId, // Agregar el campo seccionId en los datos
         tieneComentario,
+        descripcionComentario,
         tieneExpresion,
         tieneCalificaciones,
         tieneClasificaciones,

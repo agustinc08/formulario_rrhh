@@ -10,6 +10,8 @@ export class CreatePreguntaDto {
 
   tieneComentario: boolean
 
+  descripcionComentario: string;
+
   tieneExpresion: boolean
 
   tieneCalificaciones: boolean
