@@ -7,6 +7,18 @@ export class SeccionesService {
   constructor(private prisma: PrismaService) {}
 
   async crearSeccion(descripcion: string): Promise<Seccion> {
+    const seccionExistente = await this.prisma.seccion.findFirst({
+      where: {
+        descripcion: {
+          equals: descripcion,
+        },
+      },
+    });
+  
+    if (seccionExistente) {
+      throw new Error('Ya existe una sección con el mismo nombre');
+    }
+  
     return this.prisma.seccion.create({
       data: { descripcion },
     });

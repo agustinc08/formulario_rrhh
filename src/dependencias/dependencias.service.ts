@@ -9,14 +9,27 @@ export class DependenciasService {
   constructor(private prisma: PrismaService) {}
 
   async create(createDependenciaDto: CreateDependenciaDto): Promise<Dependencia> {
+    const { nombreDependencia, rol } = createDependenciaDto;
+  
+    // Verificar si ya existe una dependencia con el mismo nombre
+    const existingDependencia = await this.prisma.dependencia.findFirst({
+      where: { nombreDependencia: { equals: nombreDependencia } },
+    });
+  
+    if (existingDependencia) {
+      throw new Error('Ya existe una dependencia con el mismo nombre');
+    }
+  
+    // Crear la nueva dependencia
     const data: Prisma.DependenciaCreateInput = {
-      nombreDependencia: createDependenciaDto.nombreDependencia,
-      rol : createDependenciaDto.rol
+      nombreDependencia,
+      rol,
     };
+  
     const dependencia = await this.prisma.dependencia.create({ data });
     return dependencia;
   }
-
+  
   async findAll(): Promise<Dependencia[]> {
     const dependencias = await this.prisma.dependencia.findMany();
     return dependencias;
