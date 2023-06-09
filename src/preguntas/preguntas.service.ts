@@ -21,7 +21,7 @@ export class PreguntasService {
     return this.prisma.pregunta.create({
       data: {
         descripcion,
-        seccionId, // Agregar el campo seccionId en los datos
+        seccionId,
         tieneComentario,
         descripcionComentario,
         tieneExpresion,

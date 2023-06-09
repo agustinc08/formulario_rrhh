@@ -99,13 +99,19 @@ export class RespuestasService {
       where: {
         preguntaId: preguntaId,
       },
+      include: {
+        comentarios: true,
+      },
     });
   }
-
+  
   async getRespuestasByDependenciaId(dependenciaId: number): Promise<Respuesta[]> {
     return this.prisma.respuesta.findMany({
       where: {
         dependenciaId: dependenciaId,
+      },
+      include: {
+        comentarios: true,
       },
     });
   }
