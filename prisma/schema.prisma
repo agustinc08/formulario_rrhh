@@ -9,17 +9,18 @@ datasource db {
 
 // Tabla Pregunta
 model Pregunta {
-  id                   Int          @id @default(autoincrement())
-  descripcion          String
-  tieneComentario      Boolean      @default(false)
-  tieneExpresion       Boolean      @default(false)
-  tieneCalificaciones  Boolean      @default(false)
-  tieneClasificaciones Boolean      @default(false)
-  tieneGrado           Boolean      @default(false)
-  respuestas           Respuesta[]
-  seccion              Seccion?     @relation(fields: [seccionId], references: [id])
-  seccionId            Int?
-  comentarios          Comentario[]
+  id                    Int          @id @default(autoincrement())
+  descripcion           String
+  tieneComentario       Boolean      @default(false)
+  descripcionComentario String?
+  tieneExpresion        Boolean      @default(false)
+  tieneCalificaciones   Boolean      @default(false)
+  tieneClasificaciones  Boolean      @default(false)
+  tieneGrado            Boolean      @default(false)
+  respuestas            Respuesta[]
+  seccion               Seccion?     @relation(fields: [seccionId], references: [id])
+  seccionId             Int?
+  comentarios           Comentario[]
 }
 
 model Seccion {

@@ -13,4 +13,7 @@ export class CreateComentarioDto {
 
   @IsNotEmpty()
   dependenciaId: number;
+
+  @IsNotEmpty()
+  descripcion: string;
 }
