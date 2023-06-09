@@ -9,7 +9,21 @@ export class ClavesService {
 
   async create(createClaveDto: CreateClaveDto) {
     const { dependenciaId, clave } = createClaveDto;
-
+  
+    // Verificar si la dependencia ya tiene una clave asignada
+    const dependencia = await this.prisma.dependencia.findUnique({
+      where: {
+        id: dependenciaId,
+      },
+      include: {
+        claves: true,
+      },
+    });
+  
+    if (dependencia && dependencia.claves && dependencia.claves.clave === clave) {
+      throw new Error('La dependencia ya tiene una clave asignada');
+    }
+  
     const claveCreated = await this.prisma.clave.create({
       data: {
         dependencia: {
@@ -20,10 +34,10 @@ export class ClavesService {
         clave,
       },
     });
-
+  
     return claveCreated;
   }
-
+  
   async findAll() {
     const claves = await this.prisma.clave.findMany({
       include: {
