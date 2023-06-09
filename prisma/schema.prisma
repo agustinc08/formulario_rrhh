@@ -7,6 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Inicio {
+  id                    Int          @id @default(autoincrement())
+  tituloPrincipal           String
+  subTitulo           String
+}
+
 // Tabla Pregunta
 model Pregunta {
   id                    Int          @id @default(autoincrement())
