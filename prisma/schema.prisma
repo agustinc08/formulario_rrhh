@@ -8,12 +8,15 @@ datasource db {
 }
 
 model Inicio {
-  id              Int    @id @default(autoincrement())
+  id              Int      @id @default(autoincrement())
   tituloPrincipal String
-  subTitulo       String
+  introduccion    String?
+  objetivo        String?
+  seccion         Seccion? @relation(fields: [seccionId], references: [id])
+  seccionId       Int?
+  parrafo         String?
 }
 
-// Tabla Pregunta
 model Pregunta {
   id                    Int          @id @default(autoincrement())
   descripcion           String
@@ -33,6 +36,7 @@ model Seccion {
   id          Int        @id @default(autoincrement())
   descripcion String
   preguntas   Pregunta[]
+  inicio      Inicio[]
 }
 
 // Tabla Respuesta
