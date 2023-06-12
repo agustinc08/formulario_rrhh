@@ -5,12 +5,11 @@ import { ComentariosModule } from './comentarios/comentarios.module';
 import { DependenciasModule } from './dependencias/dependencias.module';
 import { ClavesModule } from './claves/claves.module';
 import { SeccionesModule } from './secciones/seccionesModule';
+import { InicioModule } from './inicio/inicio.module';
 
 
 @Module({
-  imports: [PreguntasModule, RespuestasModule, ComentariosModule, DependenciasModule, ClavesModule, SeccionesModule
-],
-  controllers: [],
-  providers: [],
+  imports: [PreguntasModule, RespuestasModule, ComentariosModule, DependenciasModule, 
+    ClavesModule, SeccionesModule, InicioModule]
 })
 export class AppModule {}
