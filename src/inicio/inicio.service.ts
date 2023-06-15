@@ -6,12 +6,22 @@ import { PrismaService } from 'src/prisma.service';
 export class InicioService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getInicioPorId(id: number): Promise<Inicio | null> {
-    return this.prisma.inicio.findUnique({ where: { id } });
+  async createInicio(inicioData: any): Promise<Inicio> {
+    // Verifica si ya existe un inicio creado
+    const existingInicio = await this.prisma.inicio.findFirst();
+  
+    if (existingInicio) {
+      throw new Error('Ya hay un inicio creado');
+    }
+
+    console.log(existingInicio)
+  
+    // Crea el inicio
+    return this.prisma.inicio.create({ data: inicioData });
   }
 
-  async createInicio(inicioData: any): Promise<Inicio> {
-    return this.prisma.inicio.create({ data: inicioData });
+  async getInicioPorId(id: number): Promise<Inicio | null> {
+    return this.prisma.inicio.findUnique({ where: { id } });
   }
 
   async getInicio() {
