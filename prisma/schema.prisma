@@ -13,9 +13,6 @@ model Formulario {
   preguntas    Pregunta[]
   dependencias Dependencia[]
   respuestas   Respuesta[]
-  inicio       Inicio?       @relation(fields: [inicioId], references: [id])
-  inicioId     Int?
-  secciones    Seccion[]
 }
 
 model Inicio {
@@ -24,16 +21,12 @@ model Inicio {
   introduccionDescripcion String?
   objetivoDescripcion     String?
   parrafo                 String?
-  formularioId            Int?
-  formulario    Formulario[]
 }
 
 model Seccion {
   id          Int        @id @default(autoincrement())
   descripcion String
   preguntas   Pregunta[]
-  formulario  Formulario @relation(fields: [formularioId], references: [id])
-  formularioId Int
 }
 
 model Pregunta {
