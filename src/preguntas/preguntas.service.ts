@@ -16,7 +16,8 @@ export class PreguntasService {
       tieneExpresion,
       tieneCalificaciones,
       tieneClasificaciones,
-      tieneGrado
+      tieneGrado,
+      formularioId,
     } = createPreguntaDto;
     return this.prisma.pregunta.create({
       data: {
@@ -27,7 +28,8 @@ export class PreguntasService {
         tieneExpresion,
         tieneCalificaciones,
         tieneClasificaciones,
-        tieneGrado
+        tieneGrado,
+        formularioId
       },
     });
   }

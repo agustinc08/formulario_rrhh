@@ -20,7 +20,7 @@ export class ClavesService {
       },
     });
   
-    if (dependencia && dependencia.claves && dependencia.claves.clave === clave) {
+    if (dependencia && dependencia.claves && dependencia.claves.some(claveObj => claveObj.clave === clave)) {
       throw new Error('La dependencia ya tiene una clave asignada');
     }
   

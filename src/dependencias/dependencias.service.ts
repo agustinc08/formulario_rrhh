@@ -7,7 +7,7 @@ import { PrismaService } from 'src/prisma.service';
 @Injectable()
 export class DependenciasService {
   constructor(private prisma: PrismaService) {}
-
+  
   async create(createDependenciaDto: CreateDependenciaDto): Promise<Dependencia> {
     const { nombreDependencia, rol } = createDependenciaDto;
   
@@ -20,16 +20,29 @@ export class DependenciasService {
       throw new Error('Ya existe una dependencia con el mismo nombre');
     }
   
-    // Crear la nueva dependencia
+    // Obtener el último valor de id
+    const lastDependencia = await this.prisma.dependencia.findFirst({
+      orderBy: { id: 'desc' },
+    });
+  
+    // Calcular el nuevo valor de id
+    const newId = lastDependencia ? lastDependencia.id + 1 : 1;
+  
+    // Crear la nueva dependencia sin la propiedad id
     const data: Prisma.DependenciaCreateInput = {
       nombreDependencia,
       rol,
     };
   
-    const dependencia = await this.prisma.dependencia.create({ data });
-    return dependencia;
+    // Utilizar createMany() para insertar la nueva dependencia con el nuevo valor de id
+    const dependencia = await this.prisma.dependencia.createMany({
+      data: [{ id: newId, ...data }],
+    });
+  
+    return dependencia[0];
   }
   
+
   async findAll(): Promise<Dependencia[]> {
     const dependencias = await this.prisma.dependencia.findMany();
     return dependencias;

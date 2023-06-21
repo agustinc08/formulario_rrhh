@@ -9,7 +9,7 @@ export class RespuestasService {
 
    async createRespuesta(createRespuestaDto: CreateRespuestaDto) {
     try {
-      const { respuestas, edad, genero } = createRespuestaDto;
+      const { respuestas, edad, genero, formularioId } = createRespuestaDto;
   
       const respuestaPromises = respuestas.map(async (respuesta) => {
         const { preguntaId, dependenciaId, respuestaText, comentario } = respuesta;
@@ -35,6 +35,7 @@ export class RespuestasService {
           edad,
           genero,
           pregunta: { connect: { id: preguntaId } }, // Use the converted id
+          formulario: { connect: {id: formularioId}}
         };
   
         if (respuestaExpresion) {

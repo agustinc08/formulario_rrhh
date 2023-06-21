@@ -19,4 +19,6 @@ export class CreatePreguntaDto {
   tieneClasificaciones: boolean
 
   tieneGrado: boolean
+
+  formularioId: number;
 }

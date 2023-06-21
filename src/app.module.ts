@@ -8,12 +8,13 @@ import { SeccionesModule } from './secciones/seccionesModule';
 import { InicioModule } from './inicio/inicio.module';
 import { FormularioController } from './formulario/formulario.controller';
 import { FormularioService } from './formulario/formulario.service';
+import { FormularioModule } from './formulario/formulario.module';
 
 
 @Module({
   imports: [PreguntasModule, RespuestasModule, ComentariosModule, DependenciasModule, 
-    ClavesModule, SeccionesModule, InicioModule],
-  controllers: [FormularioController],
-  providers: [FormularioService]
+    ClavesModule, SeccionesModule, InicioModule, FormularioModule],
+  controllers: [],
+  providers: []
 })
 export class AppModule {}
