@@ -84,7 +84,7 @@ model Dependencia {
   comentarios       Comentario[]
   formulario        Formulario?  @relation(fields: [formularioId], references: [id])
   formularioId      Int?
-  rol               Rol          @default(DEPENDENCIA)
+  rol               Rol          @default(dependencia)
 }
 
 model Clave {
@@ -134,6 +134,6 @@ enum RespuestaCalificacionEnum {
 }
 
 enum Rol {
-  DEPENDENCIA
-  ADMIN
+  dependencia
+  admin
 }
