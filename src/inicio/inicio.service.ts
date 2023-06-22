@@ -13,12 +13,22 @@ export class InicioService {
     if (existingInicio) {
       throw new Error('Ya hay un inicio creado');
     }
-
-    console.log(existingInicio)
   
-    // Crea el inicio
-    return this.prisma.inicio.create({ data: inicioData });
-  }
+    // Obtén el formularioId del inicioData
+    const { formularioId, ...data } = inicioData;
+  
+    // Crea el inicio con el formularioId proporcionado
+    return this.prisma.inicio.create({
+      data: {
+        formulario: {
+          connect: {
+            id: formularioId
+          }
+        },
+        ...data
+      }
+    });
+  }  
 
   async getInicioPorId(id: number): Promise<Inicio | null> {
     return this.prisma.inicio.findUnique({ where: { id } });

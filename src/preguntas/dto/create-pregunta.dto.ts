@@ -8,17 +8,17 @@ export class CreatePreguntaDto {
   @IsInt()
   seccionId: number;
 
-  tieneComentario: boolean
+  tieneComentario: boolean;
 
   descripcionComentario: string;
 
-  tieneExpresion: boolean
+  tieneExpresion: boolean;
 
-  tieneCalificaciones: boolean
+  tieneCalificaciones: boolean;
 
-  tieneClasificaciones: boolean
+  tieneClasificaciones: boolean;
 
-  tieneGrado: boolean
+  tieneGrado: boolean;
 
   formularioId: number;
 }

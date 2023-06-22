@@ -19,21 +19,28 @@ export class PreguntasService {
       tieneGrado,
       formularioId,
     } = createPreguntaDto;
+  
     return this.prisma.pregunta.create({
       data: {
         descripcion,
-        seccionId,
+        seccion: {
+          connect: { id: seccionId }
+        },
         tieneComentario,
         descripcionComentario,
         tieneExpresion,
         tieneCalificaciones,
         tieneClasificaciones,
         tieneGrado,
-        formularioId
-      },
+        formulario: {
+          connect: {
+            id: formularioId
+          }
+        }
+      }
     });
   }
-
+  
   async getPreguntasPorSeccion(seccionId: number) {
     return this.prisma.pregunta.findMany({
       where: { seccionId: seccionId },

@@ -34,10 +34,10 @@ export class RespuestasService {
           dependencia: { connect: { id: dependenciaId } },
           edad,
           genero,
-          pregunta: { connect: { id: preguntaId } }, // Use the converted id
-          formulario: { connect: {id: formularioId}}
+          pregunta: { connect: { id: preguntaId } },
+          formulario: { connect: { id: formularioId } }
         };
-  
+        
         if (respuestaExpresion) {
           respuestaData.expresion = respuestaExpresion;
         }

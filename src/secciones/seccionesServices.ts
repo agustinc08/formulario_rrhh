@@ -6,7 +6,7 @@ import { Seccion } from '.prisma/client';
 export class SeccionesService {
   constructor(private prisma: PrismaService) {}
 
-  async crearSeccion(descripcion: string): Promise<Seccion> {
+  async crearSeccion(formularioId: number, descripcion: string): Promise<Seccion> {
     const seccionExistente = await this.prisma.seccion.findFirst({
       where: {
         descripcion: {
@@ -20,9 +20,17 @@ export class SeccionesService {
     }
   
     return this.prisma.seccion.create({
-      data: { descripcion },
+      data: {
+        descripcion,
+        formulario: {
+          connect: {
+            id: formularioId
+          }
+        }
+      },
     });
   }
+  
 
   async buscarSeccionPorId(id: number): Promise<Seccion | null> {
     return this.prisma.seccion.findUnique({
