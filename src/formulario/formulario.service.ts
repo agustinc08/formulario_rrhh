@@ -13,7 +13,7 @@ export class FormularioService {
   
       const formularios = await this.prisma.dependencia
         .findUnique({ where: { id } })
-        .formulario();
+        .formularios();
   
       return formularios;
     } catch (error) {
