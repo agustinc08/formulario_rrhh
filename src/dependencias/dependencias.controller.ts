@@ -17,9 +17,11 @@ export class DependenciasController {
     return this.dependenciasService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.dependenciasService.findOne(+id);
+ 
+  @Get(':nombre')
+  async buscarDependenciaPorNombre(@Param('nombre') nombre: string) {
+    const dependenciaId = await this.dependenciasService.buscarDependenciaPorNombre(nombre);
+    return { dependenciaId };
   }
 
   @Patch(':id')
@@ -31,4 +33,10 @@ export class DependenciasController {
   remove(@Param('id') id: string) {
     return this.dependenciasService.remove(+id);
   }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.dependenciasService.findOne(+id);
+  }
+
 }

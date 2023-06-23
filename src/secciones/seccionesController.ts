@@ -7,8 +7,8 @@ export class SeccionesController {
   constructor(private seccionesService: SeccionesService) {}
 
   @Post()
-  async crearSeccion(@Body('descripcion') descripcion: string): Promise<Seccion> {
-    return this.seccionesService.crearSeccion(descripcion);
+  async crearSeccion(@Body('descripcion') descripcion: string, @Body('formularioId') formularioId: number): Promise<Seccion> {
+    return this.seccionesService.crearSeccion(formularioId, descripcion);
   }
 
   @Get()

@@ -11,7 +11,7 @@ model Formulario {
   id           Int           @id @default(autoincrement())
   nombre       String
   preguntas    Pregunta[]
-  dependencias Dependencia[]
+  dependencias Dependencia[] @relation("FormularioDependencia")
   respuestas   Respuesta[]
   secciones    Seccion[]
   inicio       Inicio?       @relation(fields: [inicioId], references: [id])
@@ -88,8 +88,7 @@ model Dependencia {
   respuestas        Respuesta[]
   claves            Clave[]
   comentarios       Comentario[]
-  formulario        Formulario?  @relation(fields: [formularioId], references: [id])
-  formularioId      Int?
+  formularios       Formulario[] @relation("FormularioDependencia")
   rol               Rol          @default(dependencia)
 }
 

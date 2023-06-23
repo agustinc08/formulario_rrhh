@@ -53,6 +53,13 @@ export class DependenciasService {
     return dependencia;
   }
 
+  async buscarDependenciaPorNombre(nombre: string) {
+    const dependencia = await this.prisma.dependencia.findFirst({
+      where: { nombreDependencia: { equals: nombre } },
+    });
+    return dependencia ? dependencia.id : null;
+  }
+
   async update(id: number, updateDependenciaDto: UpdateDependenciaDto): Promise<Dependencia> {
     const data: Prisma.DependenciaUpdateInput = {
       nombreDependencia: updateDependenciaDto.nombreDependencia,

@@ -6,6 +6,22 @@ import { PrismaService } from 'src/prisma.service';
 export class FormularioService {
   constructor(private readonly prisma: PrismaService) { }
 
+
+  async getFormulariosPorDependencia(dependenciaId: number) {
+    try {
+      const id = parseInt(dependenciaId.toString()); // Convertir a entero
+  
+      const formularios = await this.prisma.dependencia
+        .findUnique({ where: { id } })
+        .formulario();
+  
+      return formularios;
+    } catch (error) {
+      throw new Error(`Error al obtener los formularios de la dependencia: ${error.message}`);
+    }
+  }
+  
+  
   async findAll(): Promise<Formulario[]> {
     return this.prisma.formulario.findMany();
   }

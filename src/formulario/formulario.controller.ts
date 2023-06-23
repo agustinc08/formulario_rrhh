@@ -12,6 +12,16 @@ export class FormularioController {
     return this.formularioService.findAll();
   }
 
+  @Get(':dependenciaId/formularios')
+  async obtenerFormulariosPorDependencia(@Param('dependenciaId') dependenciaId: number) {
+    try {
+      const formularios = await this.formularioService.getFormulariosPorDependencia(dependenciaId);
+      return formularios;
+    } catch (error) {
+      throw new Error(`Error al obtener los formularios de la dependencia: ${error.message}`);
+    }
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Formulario | null> {
     return this.formularioService.findOne(Number(id));
