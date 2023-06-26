@@ -9,7 +9,7 @@ export class FormularioService {
 
   async getFormulariosPorDependencia(dependenciaId: number) {
     try {
-      const id = parseInt(dependenciaId.toString()); // Convertir a entero
+      const id = parseInt(dependenciaId.toString());
   
       const formularios = await this.prisma.dependencia
         .findUnique({ where: { id } })
