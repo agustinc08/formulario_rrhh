@@ -23,6 +23,8 @@ CREATE TYPE "Rol" AS ENUM ('dependencia', 'admin');
 CREATE TABLE "Formulario" (
     "id" SERIAL NOT NULL,
     "nombre" TEXT NOT NULL,
+    "inicioId" INTEGER,
+    "estaActivo" BOOLEAN NOT NULL,
 
     CONSTRAINT "Formulario_pkey" PRIMARY KEY ("id")
 );
@@ -42,6 +44,7 @@ CREATE TABLE "Inicio" (
 CREATE TABLE "Seccion" (
     "id" SERIAL NOT NULL,
     "descripcion" TEXT NOT NULL,
+    "formularioId" INTEGER NOT NULL,
 
     CONSTRAINT "Seccion_pkey" PRIMARY KEY ("id")
 );
@@ -95,7 +98,6 @@ CREATE TABLE "Comentario" (
 CREATE TABLE "Dependencia" (
     "id" SERIAL NOT NULL,
     "nombreDependencia" TEXT NOT NULL,
-    "formularioId" INTEGER,
     "rol" "Rol" NOT NULL DEFAULT 'dependencia',
 
     CONSTRAINT "Dependencia_pkey" PRIMARY KEY ("id")
@@ -109,6 +111,24 @@ CREATE TABLE "Clave" (
 
     CONSTRAINT "Clave_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateTable
+CREATE TABLE "_FormularioDependencia" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_FormularioDependencia_AB_unique" ON "_FormularioDependencia"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_FormularioDependencia_B_index" ON "_FormularioDependencia"("B");
+
+-- AddForeignKey
+ALTER TABLE "Formulario" ADD CONSTRAINT "Formulario_inicioId_fkey" FOREIGN KEY ("inicioId") REFERENCES "Inicio"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Seccion" ADD CONSTRAINT "Seccion_formularioId_fkey" FOREIGN KEY ("formularioId") REFERENCES "Formulario"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Pregunta" ADD CONSTRAINT "Pregunta_seccionId_fkey" FOREIGN KEY ("seccionId") REFERENCES "Seccion"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -135,7 +155,10 @@ ALTER TABLE "Comentario" ADD CONSTRAINT "Comentario_respuestaId_fkey" FOREIGN KE
 ALTER TABLE "Comentario" ADD CONSTRAINT "Comentario_dependenciaId_fkey" FOREIGN KEY ("dependenciaId") REFERENCES "Dependencia"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Dependencia" ADD CONSTRAINT "Dependencia_formularioId_fkey" FOREIGN KEY ("formularioId") REFERENCES "Formulario"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Clave" ADD CONSTRAINT "Clave_dependenciaId_fkey" FOREIGN KEY ("dependenciaId") REFERENCES "Dependencia"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Clave" ADD CONSTRAINT "Clave_dependenciaId_fkey" FOREIGN KEY ("dependenciaId") REFERENCES "Dependencia"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "_FormularioDependencia" ADD CONSTRAINT "_FormularioDependencia_A_fkey" FOREIGN KEY ("A") REFERENCES "Dependencia"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_FormularioDependencia" ADD CONSTRAINT "_FormularioDependencia_B_fkey" FOREIGN KEY ("B") REFERENCES "Formulario"("id") ON DELETE CASCADE ON UPDATE CASCADE;

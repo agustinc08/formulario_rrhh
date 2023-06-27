@@ -16,6 +16,7 @@ model Formulario {
   secciones    Seccion[]
   inicio       Inicio?       @relation(fields: [inicioId], references: [id])
   inicioId     Int?
+  estaActivo Boolean
 }
 
 model Inicio {
