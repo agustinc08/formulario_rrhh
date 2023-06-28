@@ -31,30 +31,18 @@ export class FormularioService {
   }
 
   async create(data: Prisma.FormularioCreateInput): Promise<Formulario> {
-    // Obtener el último formulario creado
-    const lastFormulario = await this.prisma.formulario.findFirst({
-      orderBy: { id: 'desc' },
-    });
-  
-    let nextId = 1;
-  
-    if (lastFormulario) {
-      // Si hay un formulario existente, generar el siguiente ID
-      nextId = lastFormulario.id + 1;
-    }
-  
-    // Asignar el nuevo ID al formulario (omitir la propiedad 'id')
     const formularioData: Prisma.FormularioCreateInput = {
       nombre: data.nombre,
       preguntas: data.preguntas,
       dependencias: data.dependencias,
       respuestas: data.respuestas,
+      estaActivo: data.estaActivo
       // Otras propiedades del formulario si las hubiera
     };
   
-    // Crear el formulario con el nuevo ID generado por Prisma
     return this.prisma.formulario.create({ data: formularioData });
   }
+  
 
   async update(id: number, data: Prisma.FormularioUpdateInput): Promise<Formulario | null> {
     return this.prisma.formulario.update({ where: { id }, data });

@@ -17,6 +17,18 @@ export class InicioController {
 
   @Post()
   async createInicio(@Body() inicioData: any) {
-    return this.inicioService.createInicio(inicioData);
+    try {
+      const inicio = await this.inicioService.createInicio(inicioData);
+      return {
+        success: true,
+        message: 'Inicio creado correctamente',
+        inicio,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
   }
 }
