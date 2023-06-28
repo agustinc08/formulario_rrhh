@@ -6,7 +6,18 @@ import { PrismaService } from 'src/prisma.service';
 export class FormularioService {
   constructor(private readonly prisma: PrismaService) { }
 
-
+  async create(data: Prisma.FormularioCreateInput): Promise<Formulario> {
+    const formularioData: Prisma.FormularioCreateInput = {
+      nombre: data.nombre,
+      preguntas: data.preguntas,
+      dependencias: data.dependencias,
+      respuestas: data.respuestas,
+      estaActivo: data.estaActivo
+    };
+  
+    return this.prisma.formulario.create({ data: formularioData });
+  }
+  
   async getFormulariosPorDependencia(dependenciaId: number) {
     try {
       const id = parseInt(dependenciaId.toString());
@@ -29,20 +40,6 @@ export class FormularioService {
   async findOne(id: number): Promise<Formulario | null> {
     return this.prisma.formulario.findUnique({ where: { id } });
   }
-
-  async create(data: Prisma.FormularioCreateInput): Promise<Formulario> {
-    const formularioData: Prisma.FormularioCreateInput = {
-      nombre: data.nombre,
-      preguntas: data.preguntas,
-      dependencias: data.dependencias,
-      respuestas: data.respuestas,
-      estaActivo: data.estaActivo
-      // Otras propiedades del formulario si las hubiera
-    };
-  
-    return this.prisma.formulario.create({ data: formularioData });
-  }
-  
 
   async update(id: number, data: Prisma.FormularioUpdateInput): Promise<Formulario | null> {
     return this.prisma.formulario.update({ where: { id }, data });

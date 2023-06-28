@@ -19,6 +19,16 @@ model Formulario {
   estaActivo Boolean?
 }
 
+model Dependencia {
+  id                Int          @id @default(autoincrement())
+  nombreDependencia String
+  respuestas        Respuesta[]
+  claves            Clave[]
+  comentarios       Comentario[]
+  formularios       Formulario[] @relation("FormularioDependencia")
+  rol               Rol          @default(dependencia)
+}
+
 model Inicio {
   id                      Int         @id @default(autoincrement())
   tituloPrincipal         String
@@ -83,15 +93,6 @@ model Comentario {
   dependenciaId   Int
 }
 
-model Dependencia {
-  id                Int          @id @default(autoincrement())
-  nombreDependencia String
-  respuestas        Respuesta[]
-  claves            Clave[]
-  comentarios       Comentario[]
-  formularios       Formulario[] @relation("FormularioDependencia")
-  rol               Rol          @default(dependencia)
-}
 
 model Clave {
   id            Int         @id @default(autoincrement())
