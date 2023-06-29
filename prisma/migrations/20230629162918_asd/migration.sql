@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Formulario" ALTER COLUMN "edad" DROP NOT NULL,
+ALTER COLUMN "genero" DROP NOT NULL;

@@ -1,11 +1,16 @@
 import { Controller, Get, Param, Post, Body, Put, Delete } from '@nestjs/common';
 import { FormularioService } from './formulario.service';
-import { Formulario } from '@prisma/client';
+import { Formulario, Prisma } from '@prisma/client';
 
 
 @Controller('formulario')
 export class FormularioController {
   constructor(private formularioService: FormularioService) {}
+
+  @Post()
+  async create(@Body() data: Prisma.FormularioCreateInput): Promise<Formulario> {
+    return this.formularioService.create(data);
+  }
 
   @Get()
   async findAll(): Promise<Formulario[]> {
@@ -25,11 +30,6 @@ export class FormularioController {
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Formulario | null> {
     return this.formularioService.findOne(Number(id));
-  }
-
-  @Post()
-  async create(@Body() data: Formulario): Promise<Formulario> {
-    return this.formularioService.create(data);
   }
 
   @Put(':id')

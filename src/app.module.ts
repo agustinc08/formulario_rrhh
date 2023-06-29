@@ -6,14 +6,14 @@ import { DependenciasModule } from './dependencias/dependencias.module';
 import { ClavesModule } from './claves/claves.module';
 import { SeccionesModule } from './secciones/seccionesModule';
 import { InicioModule } from './inicio/inicio.module';
-import { FormularioController } from './formulario/formulario.controller';
-import { FormularioService } from './formulario/formulario.service';
 import { FormularioModule } from './formulario/formulario.module';
+import { TipoPreguntaModule } from './tipo-pregunta/tipo-pregunta.module';
+import { TipoRespuestaModule } from './tipo-respuesta/tipo-respuesta.module';
 
 
 @Module({
   imports: [PreguntasModule, RespuestasModule, ComentariosModule, DependenciasModule, 
-    ClavesModule, SeccionesModule, InicioModule, FormularioModule],
+    ClavesModule, SeccionesModule, InicioModule, FormularioModule,TipoPreguntaModule,TipoRespuestaModule],
   controllers: [],
   providers: []
 })

@@ -1,6 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { CreateRespuestaDto } from './dto/create-respuesta.dto';
-import { UpdateRespuestaDto } from './dto/update-respuesta.dto';
 import { RespuestasService } from './respuestas.service';
 import { Respuesta } from '@prisma/client';
 
@@ -9,9 +8,8 @@ export class RespuestaController {
   constructor(private readonly respuestaService: RespuestasService) {}
 
   @Post()
-  async createRespuesta(@Body() createRespuestaDto: CreateRespuestaDto) {
-    console.log(createRespuestaDto)
-    return this.respuestaService.createRespuesta(createRespuestaDto);
+  async createRespuesta(@Body() data: any): Promise<Respuesta> {
+    return this.respuestaService.createRespuesta(data);
   }
 
   @Get('pregunta/:preguntaId')

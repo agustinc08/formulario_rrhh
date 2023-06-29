@@ -1,15 +1,15 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { CreatePreguntaDto } from './dto/create-pregunta.dto';
 import { UpdatePreguntaDto } from './dto/update-pregunta.dto';
 import { PreguntasService } from './preguntas.service';
+import { Pregunta } from '@prisma/client';
 
 @Controller('preguntas')
 export class PreguntaController {
   constructor(private readonly preguntaService: PreguntasService) {}
 
   @Post()
-  create(@Body() createPreguntaDto: CreatePreguntaDto) {
-    return this.preguntaService.create(createPreguntaDto);
+  async createPregunta(@Body() data: any): Promise<Pregunta> {
+    return this.preguntaService.createPregunta(data);
   }
   
   @Get()

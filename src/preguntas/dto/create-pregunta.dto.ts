@@ -12,13 +12,5 @@ export class CreatePreguntaDto {
 
   descripcionComentario: string;
 
-  tieneExpresion: boolean;
-
-  tieneCalificaciones: boolean;
-
-  tieneClasificaciones: boolean;
-
-  tieneGrado: boolean;
-
   formularioId: number;
 }

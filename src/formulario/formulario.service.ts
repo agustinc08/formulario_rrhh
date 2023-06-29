@@ -10,9 +10,11 @@ export class FormularioService {
     const formularioData: Prisma.FormularioCreateInput = {
       nombre: data.nombre,
       preguntas: data.preguntas,
-      dependencias: data.dependencias,
+      dependencias: data.dependencias, // Utiliza la propiedad correcta dependencias
       respuestas: data.respuestas,
-      estaActivo: data.estaActivo
+      estaActivo: data.estaActivo,
+      edad: data.edad,
+      genero: data.genero,
     };
   
     return this.prisma.formulario.create({ data: formularioData });

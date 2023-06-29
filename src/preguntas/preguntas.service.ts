@@ -1,46 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { CreatePreguntaDto } from './dto/create-pregunta.dto';
 import { UpdatePreguntaDto } from './dto/update-pregunta.dto';
+import { Pregunta, Prisma } from '@prisma/client';
 
 @Injectable()
 export class PreguntasService {
   constructor(private readonly prisma: PrismaService) { }
 
-  async create(createPreguntaDto: CreatePreguntaDto) {
-    const {
-      descripcion,
-      seccionId,
-      tieneComentario,
-      descripcionComentario,
-      tieneExpresion,
-      tieneCalificaciones,
-      tieneClasificaciones,
-      tieneGrado,
-      formularioId,
-    } = createPreguntaDto;
-  
+  async createPregunta(data: Prisma.PreguntaCreateInput): Promise<Pregunta> {
     return this.prisma.pregunta.create({
-      data: {
-        descripcion,
-        seccion: {
-          connect: { id: seccionId }
-        },
-        tieneComentario,
-        descripcionComentario,
-        tieneExpresion,
-        tieneCalificaciones,
-        tieneClasificaciones,
-        tieneGrado,
-        formulario: {
-          connect: {
-            id: formularioId
-          }
-        }
-      }
-    });
+      data,
+    })
   }
-  
+
   async getPreguntasPorSeccion(seccionId: number) {
     return this.prisma.pregunta.findMany({
       where: { seccionId: seccionId },
