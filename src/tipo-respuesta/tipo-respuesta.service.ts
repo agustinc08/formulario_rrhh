@@ -18,7 +18,7 @@ export class TipoRespuestaService {
     return this.prisma.tipoRespuesta.create({
       data: {
         descripcion: data.descripcion,
-        tipoPregunta: {connect:{id : data.tipoPreguntaId}},
+        tipoPregunta: { connect: { id: data.tipoPreguntaId } },
         formulario: { connect: { id: data.formularioId } }
       },
     });
