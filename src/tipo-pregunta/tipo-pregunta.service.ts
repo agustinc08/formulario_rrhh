@@ -14,9 +14,14 @@ export class TipoPreguntaService {
   async findById(id: number): Promise<TipoPregunta | null> {
     return this.prisma.tipoPregunta.findUnique({ where: { id } });
   }
-
+  
   async create(data: TipoPregunta): Promise<TipoPregunta> {
-    return this.prisma.tipoPregunta.create({ data });
+    return this.prisma.tipoPregunta.create({
+      data: {
+        descripcion: data.descripcion,
+        formulario: { connect: { id: data.formularioId } },
+      },
+    });
   }
 
   async update(id: number, data: TipoPregunta): Promise<TipoPregunta | null> {
