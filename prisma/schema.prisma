@@ -15,11 +15,11 @@ model Formulario {
   secciones      Seccion[]
   inicio         Inicio?       @relation(fields: [inicioId], references: [id])
   inicioId       Int?
-  tipoPregunta   TipoPregunta? @relation(fields: [tipoPreguntaId], references: [id])
   tipoPreguntaId Int?
+  tipoPregunta   TipoPregunta? @relation(fields: [tipoPreguntaId], references: [id])
   estaActivo     Boolean?
-  dependenciaId  Int?
-  dependencias    Dependencia?   @relation(fields: [dependenciaId], references: [id])
+  dependencias   Dependencia   @relation(fields: [dependenciaId], references: [id])
+  dependenciaId  Int
   edad           Edad?
   genero         Genero?
 }
