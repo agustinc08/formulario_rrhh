@@ -7,16 +7,12 @@ export class FormularioService {
   constructor(private readonly prisma: PrismaService) { }
 
   async create(data: Prisma.FormularioCreateInput): Promise<Formulario> {
-    const dependenciaIds: number[] = Array.isArray(data.dependencias)
-      ? data.dependencias.map((dependencia) => dependencia.id)
-      : [data.dependencias];
-  
+    const dependenciaId: number | undefined = data.dependencia?.connect?.id;
+    
     const formularioData: Prisma.FormularioCreateInput = {
       nombre: data.nombre,
       preguntas: data.preguntas,
-      dependencias: {
-        connect: dependenciaIds.map((id) => ({ id })),
-      },
+      dependencia: dependenciaId ? { connect: { id: dependenciaId } } : undefined,
       respuestas: data.respuestas,
       estaActivo: data.estaActivo,
       edad: data.edad,

@@ -8,29 +8,30 @@ datasource db {
 }
 
 model Formulario {
-  id             Int           @id @default(autoincrement())
-  nombre         String
-  preguntas      Pregunta[]
-  respuestas     Respuesta[]
-  secciones      Seccion[]
-  inicio         Inicio?       @relation(fields: [inicioId], references: [id])
-  inicioId       Int?
-  tipoPreguntaId Int?
-  tipoPregunta   TipoPregunta? @relation(fields: [tipoPreguntaId], references: [id])
-  estaActivo     Boolean?
-  dependencias   Dependencia[]
-  edad           Edad?
-  genero         Genero?
+  id              Int             @id @default(autoincrement())
+  nombre          String
+  preguntas       Pregunta[]
+  respuestas      Respuesta[]
+  secciones       Seccion[]
+  inicio          Inicio?         @relation(fields: [inicioId], references: [id])
+  inicioId        Int?
+  tipoPreguntaId  Int?
+  tipoPregunta    TipoPregunta?   @relation(fields: [tipoPreguntaId], references: [id])
+  estaActivo      Boolean?
+  dependenciaId   Int?             // Agregar ? para hacerlo opcional
+  edad            Edad?
+  genero          Genero?
+  dependencia     Dependencia?     @relation(fields: [dependenciaId], references: [id]) // Especificar fields y references
 }
 
 model Dependencia {
-  id                Int          @id @default(autoincrement())
+  id                Int             @id @default(autoincrement())
   nombreDependencia String
   respuestas        Respuesta[]
   claves            Clave[]
   comentarios       Comentario[]
   formularios       Formulario[] 
-  rol               Rol          @default(dependencia)
+  rol               Rol             @default(dependencia)
 }
 
 model Clave {
