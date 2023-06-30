@@ -15,7 +15,13 @@ export class TipoRespuestaService {
   }
 
   async create(data: TipoRespuesta): Promise<TipoRespuesta> {
-    return this.prisma.tipoRespuesta.create({ data });
+    return this.prisma.tipoRespuesta.create({
+      data: {
+        descripcion: data.descripcion,
+        tipoPregunta: {connect:{id : data.tipoPreguntaId}},
+        formulario: { connect: { id: data.formularioId } }
+      },
+    });
   }
 
   async update(id: number, data: TipoRespuesta): Promise<TipoRespuesta | null> {

@@ -16,6 +16,7 @@ model Formulario {
   inicio          Inicio?         @relation(fields: [inicioId], references: [id])
   inicioId        Int?
   tiposPregunta   TipoPregunta[]
+  tiposRespuesta  TipoRespuesta[]
   estaActivo      Boolean?
   dependenciaId   Int?             
   edad            Edad?
@@ -112,6 +113,8 @@ model TipoRespuesta {
   descripcion    String
   tipoPregunta   TipoPregunta @relation(fields: [tipoPreguntaId], references: [id])
   tipoPreguntaId Int
+  formularioId    Int               
+  formulario      Formulario          @relation(fields: [formularioId], references: [id])
   respuesta      Respuesta[]
 }
 
