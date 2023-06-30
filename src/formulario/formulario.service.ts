@@ -7,19 +7,15 @@ export class FormularioService {
   constructor(private readonly prisma: PrismaService) { }
 
   async create(data: Prisma.FormularioCreateInput): Promise<Formulario> {
-    let dependenciaIds: number[] = [];
-  
-    if (Array.isArray(data.dependencias)) {
-      dependenciaIds = data.dependencias.map((dependencia) => dependencia.id);
-    } else if (data.dependencias) {
-      dependenciaIds = [data.dependencias.id];
-    }
+    const dependenciaIds: number[] = Array.isArray(data.dependencias)
+      ? data.dependencias.map((dependencia) => dependencia.id)
+      : [data.dependencias];
   
     const formularioData: Prisma.FormularioCreateInput = {
       nombre: data.nombre,
       preguntas: data.preguntas,
       dependencias: {
-        connect: dependenciaIds.map((id) => ({ id }))
+        connect: dependenciaIds.map((id) => ({ id })),
       },
       respuestas: data.respuestas,
       estaActivo: data.estaActivo,
@@ -27,9 +23,11 @@ export class FormularioService {
       genero: data.genero,
     };
   
-    return this.prisma.formulario.create({ data: formularioData });
+    return this.prisma.formulario.create({
+      data: formularioData,
+    });
   }
-
+  
   async getFormulariosPorDependencia(dependenciaId: number) {
     try {
       const id = parseInt(dependenciaId.toString());

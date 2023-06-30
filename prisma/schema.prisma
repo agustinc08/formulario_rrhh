@@ -18,8 +18,7 @@ model Formulario {
   tipoPreguntaId Int?
   tipoPregunta   TipoPregunta? @relation(fields: [tipoPreguntaId], references: [id])
   estaActivo     Boolean?
-  dependencias   Dependencia   @relation(fields: [dependenciaId], references: [id])
-  dependenciaId  Int
+  dependencias   Dependencia[]
   edad           Edad?
   genero         Genero?
 }
@@ -30,7 +29,7 @@ model Dependencia {
   respuestas        Respuesta[]
   claves            Clave[]
   comentarios       Comentario[]
-  formularios       Formulario[]
+  formularios       Formulario[] 
   rol               Rol          @default(dependencia)
 }
 
