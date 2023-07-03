@@ -31,6 +31,7 @@ export class FormularioService {
     });
   }
   
+  
   async getFormulariosPorDependencia(dependenciaId: number) {
     try {
       const id = parseInt(dependenciaId.toString());
