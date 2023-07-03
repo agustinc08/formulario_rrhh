@@ -9,6 +9,18 @@ export class PreguntasService {
   constructor(private readonly prisma: PrismaService) { }
 
   async createPregunta(data: CreatePreguntaDto) {
+    const tipoRespuestas = await this.prisma.tipoRespuesta.findMany({
+      where: {
+        tipoPreguntaId: data.tipoPreguntaId,
+      },
+    });
+  
+    const tipoRespuestaId = tipoRespuestas[0]?.id; // Obtén el primer tipoRespuestaId que coincida
+  
+    if (!tipoRespuestaId) {
+      throw new Error('No se encontró ningún tipoRespuesta para el tipoPregunta especificado');
+    }
+  
     return this.prisma.pregunta.create({
       data: {
         descripcion: data.descripcion,
@@ -24,7 +36,7 @@ export class PreguntasService {
           connect: { id: data.formularioId },
         },
         tipoRespuesta: {
-          connect: { id: data.tipoRespuestaId },
+          connect: { id: tipoRespuestaId },
         },
       },
     });
