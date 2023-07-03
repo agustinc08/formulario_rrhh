@@ -1,36 +1,28 @@
 import { Injectable } from '@nestjs/common';
-import { Formulario, Pregunta, Prisma } from '@prisma/client';
+import { Formulario, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class FormularioService {
   constructor(private readonly prisma: PrismaService) { }
 
-  async createPregunta(data: Prisma.PreguntaCreateInput): Promise<Pregunta> {
-    const preguntaData: Prisma.PreguntaCreateInput = {
-      descripcion: data.descripcion,
-      tieneComentario: data.tieneComentario,
-      descripcionComentario: data.descripcionComentario,
-      formulario: null, // Asignar null si no tienes acceso a la información del formulario
+  async create(data: Prisma.FormularioCreateInput): Promise<Formulario> {
+    const dependenciaId: number | undefined = data.dependencia?.connect?.id;
+    
+    const formularioData: Prisma.FormularioCreateInput = {
+      nombre: data.nombre,
+      preguntas: data.preguntas,
+      dependencia: dependenciaId ? { connect: { id: dependenciaId } } : undefined,
+      respuestas: data.respuestas,
+      estaActivo: data.estaActivo,
+      edad: data.edad,
+      genero: data.genero,
     };
   
-    if (data.formulario && data.formulario.connect && data.formulario.connect.id) {
-      preguntaData.formulario = { connect: { id: data.formulario.connect.id } };
-    }
-  
-    if (data.seccion && data.seccion.connect && data.seccion.connect.id) {
-      preguntaData.seccion = { connect: { id: data.seccion.connect.id } };
-    }
-  
-    if (data.tipoPregunta && data.tipoPregunta.connect && data.tipoPregunta.connect.id) {
-      preguntaData.tipoPregunta = { connect: { id: data.tipoPregunta.connect.id } };
-    }
-  
-    return this.prisma.pregunta.create({
-      data: preguntaData,
+    return this.prisma.formulario.create({
+      data: formularioData,
     });
   }
-  
   
   async getFormulariosPorDependencia(dependenciaId: number) {
     try {
