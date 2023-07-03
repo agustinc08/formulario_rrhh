@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { UpdatePreguntaDto } from './dto/update-pregunta.dto';
 import { CreatePreguntaDto } from './dto/create-pregunta.dto';
+import { TipoRespuesta } from '@prisma/client';
 
 @Injectable()
 export class PreguntasService {
@@ -22,10 +23,13 @@ export class PreguntasService {
         formulario: {
           connect: { id: data.formularioId },
         },
+        tipoRespuesta: {
+          connect: { id: data.tipoRespuestaId },
+        },
       },
     });
   }
-
+  
   async getPreguntasPorSeccion(seccionId: number) {
     return this.prisma.pregunta.findMany({
       where: { seccionId: seccionId },

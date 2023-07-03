@@ -13,5 +13,6 @@ export class CreatePreguntaDto {
   descripcionComentario: string;
 
   formularioId: number;
-  tipoPreguntaId: any;
+  tipoPreguntaId: number;
+  tipoRespuestaId: number;
 }
