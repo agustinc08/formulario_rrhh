@@ -9,8 +9,15 @@ export class PreguntasService {
 
   async createPregunta(data: Prisma.PreguntaCreateInput): Promise<Pregunta> {
     return this.prisma.pregunta.create({
-      data,
-    })
+      data: {
+        formulario: { connect: { id: data.formulario?.connect.id } },
+        descripcion: data.descripcion,
+        seccion: { connect: { id: data.seccion?.connect.id } },
+        tieneComentario: data.tieneComentario,
+        descripcionComentario: data.descripcionComentario,
+        tipoPregunta: { connect: { id: data.tipoPregunta.connect.id } },
+      },
+    });
   }
 
   async getPreguntasPorSeccion(seccionId: number) {
