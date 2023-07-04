@@ -45,6 +45,10 @@ export class PreguntasService {
   async getPreguntasPorSeccion(seccionId: number) {
     return this.prisma.pregunta.findMany({
       where: { seccionId: seccionId },
+      include: {
+        comentarios: true,
+        tipoRespuesta: true, 
+      },
     });
   }
 

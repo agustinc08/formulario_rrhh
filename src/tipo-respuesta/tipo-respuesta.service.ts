@@ -14,6 +14,17 @@ export class TipoRespuestaService {
     return this.prisma.tipoRespuesta.findUnique({ where: { id } });
   }
 
+  async obtenerRespuestasPorTipo(tipoPreguntaId: number): Promise<TipoRespuesta[]> {
+    return this.prisma.tipoRespuesta.findMany({
+      where: {
+        tipoPreguntaId,
+      },
+      include: {
+        respuesta: true,
+      },
+    });
+  }
+
   async create(data: TipoRespuesta): Promise<TipoRespuesta> {
     return this.prisma.tipoRespuesta.create({
       data: {
