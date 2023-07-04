@@ -46,6 +46,7 @@ model Pregunta {
   descripcion           String
   tieneComentario       Boolean        @default(false)
   descripcionComentario String?
+  tieneTipoPregunta       Boolean        @default(false)
   tipoPregunta          TipoPregunta?  @relation(fields: [tipoPreguntaId], references: [id])
   tipoPreguntaId        Int?
   tipoRespuesta         TipoRespuesta? @relation(fields: [tipoRespuestaId], references: [id])
