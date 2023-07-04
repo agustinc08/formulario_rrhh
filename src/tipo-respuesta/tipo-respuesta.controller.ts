@@ -15,6 +15,7 @@ export class TipoRespuestaController {
   findById(@Param('id') id: string): Promise<TipoRespuesta | null> {
     return this.tipoRespuestaService.findById(Number(id));
   }
+  
 
   @Post()
   create(@Body() data: TipoRespuesta): Promise<TipoRespuesta> {
