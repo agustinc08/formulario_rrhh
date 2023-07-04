@@ -57,9 +57,10 @@ export class PreguntasService {
       include: {
         respuestas: {
           include: {
-            comentarios: true
-          }
-        }
+            comentarios: true,
+          },
+        },
+        tipoRespuesta: true,
       },
     });
   }
@@ -72,9 +73,10 @@ export class PreguntasService {
       include: {
         respuestas: {
           include: {
-            comentarios: true
-          }
-        }
+            comentarios: true,
+          },
+        },
+        tipoRespuesta: true,
       },
     });
   }

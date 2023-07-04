@@ -40,7 +40,17 @@ export class FormularioService {
   
   
   async findAll(): Promise<Formulario[]> {
-    return this.prisma.formulario.findMany();
+    const formularios = await this.prisma.formulario.findMany({
+      include: {
+        preguntas: {
+          include: {
+            tipoRespuesta: true,
+          },
+        },
+      },
+    });
+
+    return formularios;
   }
 
   async findOne(id: number): Promise<Formulario | null> {
