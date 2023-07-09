@@ -8,8 +8,9 @@ export class RespuestaController {
   constructor(private readonly respuestaService: RespuestasService) {}
 
   @Post()
-  async create(@Body() createRespuestaDto: CreateRespuestaDto) {
-    return this.respuestaService.create(createRespuestaDto);
+  async createRespuesta(@Body() createRespuestaDto: CreateRespuestaDto) {
+    const respuesta = await this.respuestaService.createRespuestas(createRespuestaDto);
+    return respuesta;
   }
 
   @Get('pregunta/:preguntaId')

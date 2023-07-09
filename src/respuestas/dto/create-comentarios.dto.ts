@@ -1,12 +1,7 @@
-export class CreateComentarioDto {
-
+export class CreateComentariosDto {
   respuestaComentario: string;
-
   preguntaId: number;
-
   respuestaId: number;
-
-  dependenciaId: number;
-
   formularioId: number;
+  dependenciaId: number;
 }

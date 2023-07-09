@@ -5,35 +5,44 @@ import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class RespuestasService {
-  constructor(private prisma: PrismaService) {}
-  
-  async create(createRespuestaDto: CreateRespuestaDto) {
-    const { pregunta, comentario, formulario, tipoRespuesta, dependencia } = createRespuestaDto;
-  
-    return this.prisma.respuesta.create({
-      data: {
-        pregunta: {
-          connect: { id: pregunta.id },
+  constructor(private prisma: PrismaService) { }
+
+  async createRespuestas(createRespuestaDto: CreateRespuestaDto) {
+    if (!createRespuestaDto || !createRespuestaDto.preguntasRespuestas) {
+      throw new Error('Invalid createRespuestaDto');
+    }
+    const respuestasPromises = createRespuestaDto.preguntasRespuestas.map(async (preguntaRespuesta) => {
+      const { preguntaId, comentario, formularioId, tipoRespuestaId, dependenciaId, edad, genero } = preguntaRespuesta;
+
+      const respuesta = await this.prisma.respuesta.create({
+        data: {
+          pregunta: { connect: { id: preguntaId } },
+          comentario: {
+            create: {
+              respuestaComentario: comentario.respuestaComentario,
+              dependencia: { connect: { id: comentario.dependenciaId } },
+              formulario: { connect: { id: formularioId } },
+            },
+          },
+          formulario: { connect: { id: formularioId } },
+          tipoRespuesta: { connect: { id: tipoRespuestaId } },
+          dependencia: { connect: { id: dependenciaId } },
+          edad,
+          genero,
         },
-        comentario: comentario
-          ? { connect: { id: comentario.id } }
-          : undefined,
-        formulario: {
-          connect: { id: formulario.id },
+        include: {
+          comentario: true,
         },
-        tipoRespuesta: {
-          connect: { id: tipoRespuesta.id },
-        },
-        dependencia: {
-          connect: { id: dependencia.id },
-        },
-        createdAt: createRespuestaDto.createdAt,
-        edad: createRespuestaDto.edad,
-        genero: createRespuestaDto.genero,
-      },
+      });
+
+      return respuesta;
     });
+
+    const respuestas = await Promise.all(respuestasPromises);
+
+    return respuestas;
   }
-  
+
   async buscarRespuestas(preguntaId: number, dependenciaId: number): Promise<Respuesta[]> {
     return this.prisma.respuesta.findMany({
       where: {
@@ -56,7 +65,7 @@ export class RespuestasService {
       },
     });
   }
-  
+
   async getRespuestasByDependenciaId(dependenciaId: number): Promise<Respuesta[]> {
     return this.prisma.respuesta.findMany({
       where: {
@@ -85,6 +94,6 @@ export class RespuestasService {
     return deletedRespuesta;
   }
 
- 
+
 
 }
