@@ -46,7 +46,7 @@ export class PreguntasService {
     return this.prisma.pregunta.findMany({
       where: { seccionId: seccionId },
       include: {
-        comentarios: true,
+        comentario: true,
         tipoRespuesta: true, 
       },
     });
@@ -57,7 +57,7 @@ export class PreguntasService {
       include: {
         respuestas: {
           include: {
-            comentarios: true,
+            comentario: true,
           },
         },
         tipoRespuesta: true,
@@ -73,7 +73,7 @@ export class PreguntasService {
       include: {
         respuestas: {
           include: {
-            comentarios: true,
+            comentario: true,
           },
         },
         tipoRespuesta: true,

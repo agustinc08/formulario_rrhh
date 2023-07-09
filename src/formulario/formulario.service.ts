@@ -5,23 +5,9 @@ import { PrismaService } from 'src/prisma.service';
 @Injectable()
 export class FormularioService {
   constructor(private readonly prisma: PrismaService) { }
-
-  async create(data: Prisma.FormularioCreateInput): Promise<Formulario> {
-    const dependenciaId: number | undefined = data.dependencia?.connect?.id;
-    
-    const formularioData: Prisma.FormularioCreateInput = {
-      nombre: data.nombre,
-      preguntas: data.preguntas,
-      dependencia: dependenciaId ? { connect: { id: dependenciaId } } : undefined,
-      respuestas: data.respuestas,
-      estaActivo: data.estaActivo,
-      edad: data.edad,
-      genero: data.genero,
-    };
   
-    return this.prisma.formulario.create({
-      data: formularioData,
-    });
+  async create(data: Prisma.FormularioCreateInput): Promise<Formulario> {
+    return this.prisma.formulario.create({ data });
   }
   
   async getFormulariosPorDependencia(dependenciaId: number) {

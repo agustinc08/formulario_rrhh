@@ -13,9 +13,7 @@ export class InicioService {
     const existingInicio = await this.prisma.inicio.findFirst({
       where: {
         formulario: {
-          some: {
-            id: formularioId
-          }
+          id: formularioId
         }
       },
     });
@@ -37,7 +35,7 @@ export class InicioService {
       data: createInicioData,
     });
   }
-
+  
   async getInicioPorId(id: number): Promise<Inicio | null> {
     return this.prisma.inicio.findUnique({ where: { id } });
   }

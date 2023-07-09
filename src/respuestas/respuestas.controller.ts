@@ -8,8 +8,13 @@ export class RespuestaController {
   constructor(private readonly respuestaService: RespuestasService) {}
 
   @Post()
-  async createRespuesta(@Body() data: any): Promise<Respuesta> {
-    return this.respuestaService.createRespuesta(data);
+  async create(@Body() respuestas: any[]) {
+    try {
+      const respuestasEnviadas = await this.respuestaService.create(respuestas);
+      return { respuestas: respuestasEnviadas };
+    } catch (error) {
+      return { error: error.message };
+    }
   }
 
   @Get('pregunta/:preguntaId')

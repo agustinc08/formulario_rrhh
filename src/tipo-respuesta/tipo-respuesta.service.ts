@@ -20,7 +20,7 @@ export class TipoRespuestaService {
         tipoPreguntaId,
       },
       include: {
-        respuesta: true,
+        respuestas: true,
       },
     });
   }

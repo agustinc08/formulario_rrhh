@@ -12,16 +12,13 @@ model Formulario {
   nombre         String
   preguntas      Pregunta[]
   respuestas     Respuesta[]
-  secciones      Seccion[]
-  inicio         Inicio?         @relation(fields: [inicioId], references: [id])
-  inicioId       Int?
+  comentarios    Comentario[]
   tiposPregunta  TipoPregunta[]
   tiposRespuesta TipoRespuesta[]
   estaActivo     Boolean?
-  dependenciaId  Int?
-  edad           Edad?
-  genero         Genero?
-  dependencia    Dependencia?    @relation(fields: [dependenciaId], references: [id])
+  inicio         Inicio[]
+  dependencias   Dependencia[]
+  secciones      Seccion[]
 }
 
 model Dependencia {
@@ -41,31 +38,14 @@ model Clave {
   clave         String
 }
 
-model Pregunta {
-  id                    Int            @id @default(autoincrement())
-  descripcion           String
-  tieneComentario       Boolean        @default(false)
-  descripcionComentario String?
-  tieneTipoPregunta       Boolean        @default(false)
-  tipoPregunta          TipoPregunta?  @relation(fields: [tipoPreguntaId], references: [id])
-  tipoPreguntaId        Int?
-  tipoRespuesta         TipoRespuesta? @relation(fields: [tipoRespuestaId], references: [id])
-  tipoRespuestaId       Int?
-  respuestas            Respuesta[]
-  seccion               Seccion?       @relation(fields: [seccionId], references: [id])
-  seccionId             Int?
-  comentarios           Comentario[]
-  formulario            Formulario     @relation(fields: [formularioId], references: [id])
-  formularioId          Int
-}
-
 model Inicio {
   id                      Int          @id @default(autoincrement())
   tituloPrincipal         String
   introduccionDescripcion String?
   objetivoDescripcion     String?
   parrafo                 String?
-  formulario              Formulario[]
+  formulario              Formulario?  @relation(fields: [formularioId], references: [id])
+  formularioId            Int?
 }
 
 model Seccion {
@@ -76,37 +56,59 @@ model Seccion {
   formularioId Int
 }
 
+model Pregunta {
+  id                    Int            @id @default(autoincrement())
+  descripcion           String
+  descripcionComentario String?
+  tieneComentario       Boolean        @default(false)
+  tieneTipoPregunta     Boolean        @default(false)
+  tipoPregunta          TipoPregunta?  @relation(fields: [tipoPreguntaId], references: [id])
+  tipoPreguntaId        Int?
+  tipoRespuesta         TipoRespuesta? @relation(fields: [tipoRespuestaId], references: [id])
+  tipoRespuestaId       Int?
+  seccion               Seccion?       @relation(fields: [seccionId], references: [id])
+  seccionId             Int?
+  comentario            Comentario?    @relation(fields: [comentarioId], references: [id])
+  comentarioId          Int?
+  formulario            Formulario     @relation(fields: [formularioId], references: [id])
+  formularioId          Int
+  respuestas            Respuesta[]
+}
+
 model Respuesta {
   id              Int           @id @default(autoincrement())
   createdAt       DateTime      @default(now())
   pregunta        Pregunta      @relation(fields: [preguntaId], references: [id])
   preguntaId      Int
-  comentarios     Comentario[]
-  formularioId    Int
+  comentario      Comentario?   @relation(fields: [comentarioId], references: [id])
+  comentarioId    Int?
   formulario      Formulario    @relation(fields: [formularioId], references: [id])
+  formularioId    Int
   tipoRespuesta   TipoRespuesta @relation(fields: [tipoRespuestaId], references: [id])
   tipoRespuestaId Int
-  dependencias    Dependencia   @relation(fields: [dependenciaId], references: [id])
+  dependencia     Dependencia   @relation(fields: [dependenciaId], references: [id])
   dependenciaId   Int
+  edad            Edad?
+  genero          Genero?
 }
 
 model Comentario {
   id            Int         @id @default(autoincrement())
   descripcion   String?
   comentario    String
-  preguntaId    Int?
-  pregunta      Pregunta?   @relation(fields: [preguntaId], references: [id])
-  respuestaId   Int?
-  respuesta     Respuesta?  @relation(fields: [respuestaId], references: [id])
+  pregunta      Pregunta[]
+  respuesta     Respuesta[]
   dependencia   Dependencia @relation(fields: [dependenciaId], references: [id])
   dependenciaId Int
+  formulario    Formulario? @relation(fields: [formularioId], references: [id])
+  formularioId  Int?
 }
 
 model TipoPregunta {
   id            Int             @id @default(autoincrement())
   descripcion   String
-  formularioId  Int // Campo de clave foránea hacia Formulario
-  formulario    Formulario      @relation(fields: [formularioId], references: [id]) // Relación con Formulario
+  formulario    Formulario      @relation(fields: [formularioId], references: [id])
+  formularioId  Int
   preguntas     Pregunta[]
   tipoRespuesta TipoRespuesta[]
 }
@@ -117,9 +119,9 @@ model TipoRespuesta {
   tipoPregunta   TipoPregunta @relation(fields: [tipoPreguntaId], references: [id])
   tipoPreguntaId Int
   preguntas      Pregunta[]
-  formularioId   Int
   formulario     Formulario   @relation(fields: [formularioId], references: [id])
-  respuesta      Respuesta[]
+  formularioId   Int
+  respuestas     Respuesta[]
 }
 
 enum Genero {
