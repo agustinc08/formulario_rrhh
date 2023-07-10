@@ -32,7 +32,9 @@ export class RespuestasService {
         },
         include: {
           comentario: true,
+          tipoRespuesta:true,
         },
+        
       });
 
       return respuesta;
