@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { CreateRespuestaDto } from './dto/create-respuesta.dto';
 import { RespuestasService } from './respuestas.service';
 import { Respuesta } from '@prisma/client';
@@ -9,7 +17,9 @@ export class RespuestaController {
 
   @Post()
   async createRespuesta(@Body() createRespuestaDto: CreateRespuestaDto) {
-    const respuesta = await this.respuestaService.createRespuestas(createRespuestaDto);
+    const respuesta = await this.respuestaService.createRespuestas(
+      createRespuestaDto,
+    );
     return respuesta;
   }
 
@@ -18,7 +28,7 @@ export class RespuestaController {
     @Param('preguntaId') preguntaId: string,
   ): Promise<Respuesta[]> {
     return this.respuestaService.getRespuestasByPreguntaId(
-      parseInt(preguntaId),
+      parseInt(preguntaId, 10),
     );
   }
 
@@ -27,18 +37,33 @@ export class RespuestaController {
     @Param('dependenciaId') dependenciaId: string,
   ): Promise<Respuesta[]> {
     return this.respuestaService.getRespuestasByDependenciaId(
-      parseInt(dependenciaId),
+      parseInt(dependenciaId, 10),
     );
   }
 
-  @Get(':preguntaId/:dependenciaId')
+  @Get('formulario/:formularioId')
+  async getRespuestasByFormularioId(
+    @Param('formularioId') formularioId: string,
+  ): Promise<Respuesta[]> {
+    return this.respuestaService.getRespuestasByFormularioId(
+      parseInt(formularioId, 10),
+    );
+  }
+
+  @Get(':preguntaId/:dependenciaId/:formularioId')
   async buscarRespuestas(
     @Param('preguntaId') preguntaId: string,
     @Param('dependenciaId') dependenciaId: string,
+    @Param('formularioId') formularioId: string,
   ): Promise<Respuesta[]> {
     const idPregunta = parseInt(preguntaId, 10);
     const idDependencia = parseInt(dependenciaId, 10);
-    return this.respuestaService.buscarRespuestas(idPregunta, idDependencia);
+    const idFormulario = parseInt(formularioId, 10);
+    return this.respuestaService.buscarRespuestas(
+      [idPregunta],
+      [idDependencia],
+      [idFormulario],
+    );
   }
 
   @Get()
@@ -55,8 +80,4 @@ export class RespuestaController {
   remove(@Param('id') id: string) {
     return this.respuestaService.remove(+id);
   }
-
-
-
-  
 }

@@ -2,7 +2,6 @@ import { Controller, Get, Param, Post, Body, Put, Delete } from '@nestjs/common'
 import { FormularioService } from './formulario.service';
 import { Formulario, Prisma } from '@prisma/client';
 
-
 @Controller('formulario')
 export class FormularioController {
   constructor(private formularioService: FormularioService) {}
@@ -25,6 +24,11 @@ export class FormularioController {
     } catch (error) {
       throw new Error(`Error al obtener los formularios de la dependencia: ${error.message}`);
     }
+  }
+
+  @Get('activo/:formularioId')
+  async findActiveFormulario(@Param('formularioId') formularioId: string): Promise<Formulario | null> {
+    return this.formularioService.findActiveFormulario(Number(formularioId));
   }
 
   @Get(':id')

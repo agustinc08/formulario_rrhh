@@ -24,6 +24,14 @@ export class FormularioService {
     }
   }
   
+  async findActiveFormulario(formularioId: number): Promise<Formulario | null> {
+    return this.prisma.formulario.findFirst({
+      where: {
+        id: formularioId,
+        estaActivo: true,
+      },
+    });
+  }
   
   async findAll(): Promise<Formulario[]> {
     const formularios = await this.prisma.formulario.findMany({

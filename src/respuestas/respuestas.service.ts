@@ -45,14 +45,21 @@ export class RespuestasService {
     return respuestas;
   }
 
-  async buscarRespuestas(preguntaId: number, dependenciaId: number): Promise<Respuesta[]> {
+  async buscarRespuestas(preguntaIds: number[], dependenciaIds: number[], formularioIds: number[]): Promise<Respuesta[]> {
     return this.prisma.respuesta.findMany({
       where: {
-        preguntaId,
-        dependenciaId,
+        preguntaId: {
+          in: preguntaIds,
+        },
+        dependenciaId: {
+          in: dependenciaIds,
+        },
+        formularioId: {
+          in: formularioIds,
+        },
       },
       include: {
-        comentario: true, // Carga los comentarios asociados a cada respuesta
+        comentario: true,
       },
     });
   }
@@ -67,11 +74,22 @@ export class RespuestasService {
       },
     });
   }
-
+  
   async getRespuestasByDependenciaId(dependenciaId: number): Promise<Respuesta[]> {
     return this.prisma.respuesta.findMany({
       where: {
         dependenciaId: dependenciaId,
+      },
+      include: {
+        comentario: true,
+      },
+    });
+  }
+  
+  async getRespuestasByFormularioId(formularioId: number): Promise<Respuesta[]> {
+    return this.prisma.respuesta.findMany({
+      where: {
+        formularioId: formularioId,
       },
       include: {
         comentario: true,
