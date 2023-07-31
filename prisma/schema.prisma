@@ -95,7 +95,7 @@ model Respuesta {
 model Comentario {
   id            Int         @id @default(autoincrement())
   descripcion   String?
-  respuestaComentario    String
+  respuestaComentario    String?
   pregunta      Pregunta[]
   respuesta     Respuesta[]
   dependencia   Dependencia @relation(fields: [dependenciaId], references: [id])

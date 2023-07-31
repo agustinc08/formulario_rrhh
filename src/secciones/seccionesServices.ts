@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { Seccion } from '.prisma/client';
+import { Formulario } from '@prisma/client';
 
 @Injectable()
 export class SeccionesService {
@@ -30,9 +31,36 @@ export class SeccionesService {
       },
     });
   }
-  
+
+  async buscarSeccionesConFormularioActivo(): Promise<Seccion[]> {
+    // Get all active formularios
+    const formulariosActivos = await this.prisma.formulario.findMany({
+      where: {
+        estaActivo: true,
+      },
+    });
+
+    // Extract the IDs of the active formularios
+    const formularioIds = formulariosActivos.map((formulario: Formulario) => formulario.id);
+
+    // Get all secciones that are associated with the active formularios
+    return this.prisma.seccion.findMany({
+      where: {
+        formulario: {
+          id: {
+            in: formularioIds,
+          },
+        },
+      },
+    });
+  }
 
   async buscarSeccionPorId(id: number): Promise<Seccion | null> {
+    // Ensure that the id is a valid integer
+    if (isNaN(id)) {
+      throw new Error('Invalid id provided. Expected a valid integer.');
+    }
+
     return this.prisma.seccion.findUnique({
       where: { id },
     });

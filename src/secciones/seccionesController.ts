@@ -16,10 +16,22 @@ export class SeccionesController {
     return this.seccionesService.buscarTodasLasSecciones();
   }
 
+  // Use the new method to fetch secciones with an active formulario
+  @Get('conFormularioActivo')
+  async buscarSeccionesConFormularioActivo(): Promise<Seccion[]> {
+    return this.seccionesService.buscarSeccionesConFormularioActivo();
+  }
+
   @Get(':id')
   async buscarSeccionPorId(@Param('id') id: string): Promise<Seccion | null> {
-    return this.seccionesService.buscarSeccionPorId(Number(id));
-  }
+    const parsedId = parseInt(id, 10); // Parse the id string to an integer
+
+    if (isNaN(parsedId)) {
+      throw new Error('Invalid id provided. Expected a valid integer.');
+    }
+
+    return this.seccionesService.buscarSeccionPorId(parsedId);
+  }11
 
   @Put(':id')
   async actualizarSeccion(

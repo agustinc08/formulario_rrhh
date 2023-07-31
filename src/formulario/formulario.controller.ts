@@ -11,6 +11,16 @@ export class FormularioController {
     return this.formularioService.create(data);
   }
 
+  @Get(':formularioId/secciones')
+  async obtenerSeccionesPorFormulario(@Param('formularioId') formularioId: number) {
+    try {
+      const secciones = await this.formularioService.getSeccionesPorFormulario(formularioId);
+      return secciones;
+    } catch (error) {
+      throw new Error(`Error al obtener las secciones del formulario: ${error.message}`);
+    }
+  }
+
   @Get()
   async findAll(): Promise<Formulario[]> {
     return this.formularioService.findAll();

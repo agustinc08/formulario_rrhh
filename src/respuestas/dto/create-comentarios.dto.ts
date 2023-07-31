@@ -1,5 +1,5 @@
 export class CreateComentariosDto {
-  respuestaComentario: string;
+  respuestaComentario?: string;
   preguntaId: number;
   respuestaId: number;
   formularioId: number;

@@ -24,6 +24,22 @@ export class FormularioService {
     }
   }
   
+  async getSeccionesPorFormulario(formularioId: number) {
+    try {
+      const id = parseInt(formularioId.toString());
+
+      const secciones = await this.prisma.seccion.findMany({
+        where: {
+          formularioId: id,
+        },
+      });
+
+      return secciones;
+    } catch (error) {
+      throw new Error(`Error al obtener las secciones del formulario: ${error.message}`);
+    }
+  }
+
   async findActiveFormulario(formularioId: number): Promise<Formulario | null> {
     return this.prisma.formulario.findFirst({
       where: {

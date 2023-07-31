@@ -35,16 +35,31 @@ export class InicioService {
       data: createInicioData,
     });
   }
-  
+
   async getInicioPorId(id: number): Promise<Inicio | null> {
-    return this.prisma.inicio.findUnique({ where: { id } });
+    return this.prisma.inicio.findUnique({
+      where: { id }, // Use the provided ID to fetch the specific inicio
+    });
+  }
+
+  async getActiveInicio(): Promise<Inicio | null> {
+    try {
+      const inicio = await this.prisma.inicio.findFirst({
+        where: {
+          formulario: {
+            estaActivo: true,
+          },
+        },
+      });
+      return inicio;
+    } catch (error) {
+      throw new Error('Error retrieving active Inicio data');
+    }
   }
 
   async getInicio() {
     try {
-      const inicio = await this.prisma.inicio.findFirst({
-       
-      });
+      const inicio = await this.prisma.inicio.findFirst({});
       return inicio;
     } catch (error) {
       throw new Error('Error retrieving Inicio data');
