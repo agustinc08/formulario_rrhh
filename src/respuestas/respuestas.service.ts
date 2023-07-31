@@ -11,37 +11,53 @@ export class RespuestasService {
     if (!createRespuestaDto || !createRespuestaDto.preguntasRespuestas) {
       throw new Error('Invalid createRespuestaDto');
     }
+  
     const respuestasPromises = createRespuestaDto.preguntasRespuestas.map(async (preguntaRespuesta) => {
       const { preguntaId, comentario, formularioId, tipoRespuestaId, dependenciaId, edad, genero } = preguntaRespuesta;
-
-      const respuesta = await this.prisma.respuesta.create({
-        data: {
-          pregunta: { connect: { id: preguntaId } },
-          comentario: {
-            create: {
-              respuestaComentario: comentario.respuestaComentario,
-              dependencia: { connect: { id: comentario.dependenciaId } },
-              formulario: { connect: { id: formularioId } },
-            },
+  
+      // Verificar si la dependencia existe antes de crear la respuesta
+      const dependencia = await this.prisma.dependencia.findUnique({
+        where: { id: dependenciaId },
+      });
+  
+      if (!dependencia) {
+        // Manejar el caso en el que la dependencia no existe (opcional)
+        throw new Error(`La dependencia con ID ${dependenciaId} no fue encontrada`);
+      }
+  
+      const respuestaData: any = { // Usamos 'any' para flexibilizar el tipo
+        pregunta: { connect: { id: preguntaId } },
+        formulario: { connect: { id: formularioId } },
+        tipoRespuesta: { connect: { id: tipoRespuestaId } },
+        dependencia: { connect: { id: dependenciaId } },
+        edad,
+        genero,
+      };
+  
+      // Verificar si hay un comentario y crearlo si existe
+      if (comentario && comentario.respuestaComentario) {
+        respuestaData.comentario = {
+          create: {
+            respuestaComentario: comentario.respuestaComentario,
+            dependencia: { connect: { id: dependenciaId } },
+            formulario: { connect: { id: formularioId } },
           },
-          formulario: { connect: { id: formularioId } },
-          tipoRespuesta: { connect: { id: tipoRespuestaId } },
-          dependencia: { connect: { id: dependenciaId } },
-          edad,
-          genero,
-        },
+        };
+      }
+  
+      const respuesta = await this.prisma.respuesta.create({
+        data: respuestaData,
         include: {
           comentario: true,
-          tipoRespuesta:true,
+          tipoRespuesta: true,
         },
-        
       });
-
+  
       return respuesta;
     });
-
+  
     const respuestas = await Promise.all(respuestasPromises);
-
+  
     return respuestas;
   }
 
