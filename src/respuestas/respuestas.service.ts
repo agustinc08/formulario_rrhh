@@ -61,6 +61,16 @@ export class RespuestasService {
     return respuestas;
   }
 
+  async findRespuestaById(id: number): Promise<Respuesta> {
+    return this.prisma.respuesta.findUnique({
+      where: { id },
+      include: {
+        comentario: true,
+        tipoRespuesta: true,
+      },
+    });
+  }
+
   async buscarRespuestas(preguntaIds: number[], dependenciaIds: number[], formularioIds: number[]): Promise<Respuesta[]> {
     return this.prisma.respuesta.findMany({
       where: {
@@ -80,10 +90,12 @@ export class RespuestasService {
     });
   }
 
-  async getRespuestasByPreguntaId(preguntaId: number): Promise<Respuesta[]> {
+  async getRespuestasByPreguntaIds(preguntaIds: number[]): Promise<Respuesta[]> {
     return this.prisma.respuesta.findMany({
       where: {
-        preguntaId: preguntaId,
+        preguntaId: {
+          in: preguntaIds,
+        },
       },
       include: {
         comentario: true,
@@ -91,10 +103,12 @@ export class RespuestasService {
     });
   }
   
-  async getRespuestasByDependenciaId(dependenciaId: number): Promise<Respuesta[]> {
+  async getRespuestasByDependenciaIds(dependenciaIds: number[]): Promise<Respuesta[]> {
     return this.prisma.respuesta.findMany({
       where: {
-        dependenciaId: dependenciaId,
+        dependenciaId: {
+          in: dependenciaIds,
+        },
       },
       include: {
         comentario: true,
@@ -129,7 +143,4 @@ export class RespuestasService {
     });
     return deletedRespuesta;
   }
-
-
-
 }

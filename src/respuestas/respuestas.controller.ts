@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { CreateRespuestaDto } from './dto/create-respuesta.dto';
 import { RespuestasService } from './respuestas.service';
@@ -23,33 +24,29 @@ export class RespuestaController {
     return respuesta;
   }
 
-  @Get('pregunta/:preguntaId')
-  async getRespuestasByPreguntaId(
-    @Param('preguntaId') preguntaId: string,
+  @Get('pregunta')
+  async getRespuestasByPreguntaIds(
+    @Query('ids') preguntaIds: string,
   ): Promise<Respuesta[]> {
-    return this.respuestaService.getRespuestasByPreguntaId(
-      parseInt(preguntaId, 10),
-    );
+    const idPreguntas = preguntaIds.split(',').map((id) => parseInt(id, 10));
+    return this.respuestaService.getRespuestasByPreguntaIds(idPreguntas);
   }
-
-  @Get('dependencia/:dependenciaId')
-  async getRespuestasByDependenciaId(
-    @Param('dependenciaId') dependenciaId: string,
+  
+  @Get('dependencia')
+  async getRespuestasByDependenciaIds(
+    @Query('ids') dependenciaIds: string,
   ): Promise<Respuesta[]> {
-    return this.respuestaService.getRespuestasByDependenciaId(
-      parseInt(dependenciaId, 10),
-    );
+    const idDependencias = dependenciaIds.split(',').map((id) => parseInt(id, 10));
+    return this.respuestaService.getRespuestasByDependenciaIds(idDependencias);
   }
-
-  @Get('formulario/:formularioId')
+  
+  @Get('formulario')
   async getRespuestasByFormularioId(
-    @Param('formularioId') formularioId: string,
+    @Query('ids') formularioId: string,
   ): Promise<Respuesta[]> {
-    return this.respuestaService.getRespuestasByFormularioId(
-      parseInt(formularioId, 10),
-    );
+    return this.respuestaService.getRespuestasByFormularioId(parseInt(formularioId, 10));
   }
-
+  
   @Get(':preguntaId/:dependenciaId/:formularioId')
   async buscarRespuestas(
     @Param('preguntaId') preguntaId: string,
@@ -59,6 +56,11 @@ export class RespuestaController {
     const idPregunta = parseInt(preguntaId, 10);
     const idDependencia = parseInt(dependenciaId, 10);
     const idFormulario = parseInt(formularioId, 10);
+  
+    console.log('Pregunta ID:', idPregunta);
+    console.log('Dependencia ID:', idDependencia);
+    console.log('Formulario ID:', idFormulario);
+  
     return this.respuestaService.buscarRespuestas(
       [idPregunta],
       [idDependencia],
@@ -71,10 +73,12 @@ export class RespuestaController {
     return this.respuestaService.findAll();
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.respuestaService.findOne(+id);
-  // }
+  @Get(':id')
+  async getRespuestaById(@Param('id') id: string): Promise<Respuesta> {
+    const respuestaId = parseInt(id, 10);
+    return this.respuestaService.findRespuestaById(respuestaId);
+  }
+
 
   @Delete(':id')
   remove(@Param('id') id: string) {
