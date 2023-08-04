@@ -20,6 +20,11 @@ export class FormularioController {
       throw new Error(`Error al obtener las secciones del formulario: ${error.message}`);
     }
   }
+  
+  @Get(':formularioId/secciones/activas')
+  async getSeccionesActivasPorFormulario(@Param('formularioId') formularioId: number) {
+    return this.formularioService.getSeccionesActivasPorFormulario(formularioId);
+  }
 
   @Get()
   async findAll(): Promise<Formulario[]> {

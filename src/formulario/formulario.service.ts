@@ -40,6 +40,20 @@ export class FormularioService {
     }
   }
 
+  async getSeccionesActivasPorFormulario(formularioId: number) {
+    try {
+      const formularioActivo = await this.findActiveFormulario(formularioId);
+      if (!formularioActivo) {
+        throw new Error("No se encontró un formulario activo con el formularioId proporcionado.");
+      }
+  
+      const secciones = await this.getSeccionesPorFormulario(formularioId);
+      return secciones;
+    } catch (error) {
+      throw new Error(`Error al obtener las secciones activas del formulario: ${error.message}`);
+    }
+  }
+
   async findActiveFormulario(formularioId: number): Promise<Formulario | null> {
     return this.prisma.formulario.findFirst({
       where: {
