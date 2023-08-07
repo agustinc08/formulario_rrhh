@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Formulario, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 
@@ -81,10 +81,20 @@ export class FormularioService {
     return this.prisma.formulario.findUnique({ where: { id } });
   }
 
-  async update(id: number, data: Prisma.FormularioUpdateInput): Promise<Formulario | null> {
-    return this.prisma.formulario.update({ where: { id }, data });
-  }
+  async updateFormularioEstado(id: number, estaActivo: boolean): Promise<Formulario | null> {
+    const formulario = await this.prisma.formulario.findUnique({ where: { id } });
+    if (!formulario) {
+      throw new NotFoundException('El formulario no existe');
+    }
 
+    const updatedFormulario = await this.prisma.formulario.update({
+      where: { id },
+      data: { estaActivo },
+    });
+
+    return updatedFormulario;
+  }
+  
   async delete(id: number): Promise<Formulario | null> {
     return this.prisma.formulario.delete({ where: { id } });
   }
