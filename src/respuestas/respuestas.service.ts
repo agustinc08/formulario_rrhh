@@ -7,6 +7,25 @@ import { PrismaService } from 'src/prisma.service';
 export class RespuestasService {
   constructor(private prisma: PrismaService) { }
 
+  async buscarRespuestas(preguntaIds: number[], dependenciaIds: number[], formularioIds: number[]): Promise<Respuesta[]> {
+    return this.prisma.respuesta.findMany({
+      where: {
+        preguntaId: {
+          in: preguntaIds,
+        },
+        dependenciaId: {
+          in: dependenciaIds,
+        },
+        formularioId: {
+          in: formularioIds,
+        },
+      },
+      include: {
+        comentario: true,
+      },
+    });
+  }
+  
   async createRespuestas(createRespuestaDto: CreateRespuestaDto) {
     if (!createRespuestaDto || !createRespuestaDto.preguntasRespuestas) {
       throw new Error('Invalid createRespuestaDto');
@@ -71,26 +90,7 @@ export class RespuestasService {
     });
   }
 
-  async buscarRespuestas(preguntaIds: number[], dependenciaIds: number[], formularioIds: number[]): Promise<Respuesta[]> {
-    return this.prisma.respuesta.findMany({
-      where: {
-        preguntaId: {
-          in: preguntaIds,
-        },
-        dependenciaId: {
-          in: dependenciaIds,
-        },
-        formularioId: {
-          in: formularioIds,
-        },
-      },
-      include: {
-        comentario: true,
-      },
-    });
-  }
-
-  async getRespuestasByPreguntaIds(preguntaIds: number[]): Promise<Respuesta[]> {
+    async getRespuestasByPreguntaIds(preguntaIds: number[]): Promise<Respuesta[]> {
     return this.prisma.respuesta.findMany({
       where: {
         preguntaId: {

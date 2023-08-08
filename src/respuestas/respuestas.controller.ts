@@ -16,6 +16,27 @@ import { Respuesta } from '@prisma/client';
 export class RespuestaController {
   constructor(private readonly respuestaService: RespuestasService) {}
 
+  @Get(':preguntaId/:dependenciaId/:formularioId')
+  async buscarRespuestas(
+    @Param('preguntaId') preguntaId: string,
+    @Param('dependenciaId') dependenciaId: string,
+    @Param('formularioId') formularioId: string,
+  ): Promise<Respuesta[]> {
+    const idPregunta = parseInt(preguntaId, 10);
+    const idDependencia = parseInt(dependenciaId, 10);
+    const idFormulario = parseInt(formularioId, 10);
+  
+    console.log('Pregunta ID:', idPregunta);
+    console.log('Dependencia ID:', idDependencia);
+    console.log('Formulario ID:', idFormulario);
+  
+    return this.respuestaService.buscarRespuestas(
+      [idPregunta],
+      [idDependencia],
+      [idFormulario],
+    );
+  }
+  
   @Post()
   async createRespuesta(@Body() createRespuestaDto: CreateRespuestaDto) {
     const respuesta = await this.respuestaService.createRespuestas(
@@ -47,28 +68,7 @@ export class RespuestaController {
     return this.respuestaService.getRespuestasByFormularioId(parseInt(formularioId, 10));
   }
   
-  @Get(':preguntaId/:dependenciaId/:formularioId')
-  async buscarRespuestas(
-    @Param('preguntaId') preguntaId: string,
-    @Param('dependenciaId') dependenciaId: string,
-    @Param('formularioId') formularioId: string,
-  ): Promise<Respuesta[]> {
-    const idPregunta = parseInt(preguntaId, 10);
-    const idDependencia = parseInt(dependenciaId, 10);
-    const idFormulario = parseInt(formularioId, 10);
-  
-    console.log('Pregunta ID:', idPregunta);
-    console.log('Dependencia ID:', idDependencia);
-    console.log('Formulario ID:', idFormulario);
-  
-    return this.respuestaService.buscarRespuestas(
-      [idPregunta],
-      [idDependencia],
-      [idFormulario],
-    );
-  }
-
-  @Get()
+   @Get()
   findAll() {
     return this.respuestaService.findAll();
   }
