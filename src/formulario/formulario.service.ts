@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { Formulario, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 
@@ -86,13 +86,29 @@ export class FormularioService {
     if (!formulario) {
       throw new NotFoundException('El formulario no existe');
     }
-
+  
+    const formulariosActivos = await this.prisma.formulario.findMany({ where: { estaActivo: true } });
+  
+    if (estaActivo) {
+      // Desactivar los formularios activos excepto el que se va a activar
+      await this.prisma.formulario.updateMany({
+        where: {
+          id: { not: id },
+        },
+        data: { estaActivo: false },
+      });
+    }
+  
     const updatedFormulario = await this.prisma.formulario.update({
       where: { id },
       data: { estaActivo },
     });
-
+  
     return updatedFormulario;
+  }
+  
+  async countFormulariosActivos(): Promise<number> {
+    return this.prisma.formulario.count({ where: { estaActivo: true } });
   }
   
   async delete(id: number): Promise<Formulario | null> {
