@@ -68,7 +68,7 @@ export class RespuestaController {
     return this.respuestaService.getRespuestasByFormularioId(parseInt(formularioId, 10));
   }
   
-   @Get()
+   @Get('boquitaelmasgrande')
   findAll() {
     return this.respuestaService.findAll();
   }
