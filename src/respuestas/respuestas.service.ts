@@ -5,19 +5,90 @@ import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class RespuestasService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
-  async buscarRespuestas(preguntaIds: number[], dependenciaIds: number[], formularioIds: number[]): Promise<Respuesta[]> {
+  async createRespuestas(createRespuestaDto: CreateRespuestaDto) {
+    if (!createRespuestaDto || !createRespuestaDto.preguntasRespuestas) {
+      throw new Error('Invalid createRespuestaDto');
+    }
+
+    const respuestasPromises = createRespuestaDto.preguntasRespuestas.map(
+      async (preguntaRespuesta) => {
+        const {
+          preguntaId,
+          comentario,
+          formularioId,
+          tipoRespuestaId,
+          dependenciaId,
+          edad,
+          genero,
+        } = preguntaRespuesta;
+
+        // Verificar si la dependencia existe antes de crear la respuesta
+        const dependencia = await this.prisma.dependencia.findUnique({
+          where: { id: dependenciaId },
+        });
+
+        if (!dependencia) {
+          // Manejar el caso en el que la dependencia no existe (opcional)
+          throw new Error(
+            `La dependencia con ID ${dependenciaId} no fue encontrada`,
+          );
+        }
+
+        const respuestaData: any = {
+          // Usamos 'any' para flexibilizar el tipo
+          pregunta: { connect: { id: preguntaId } },
+          formulario: { connect: { id: formularioId } },
+          tipoRespuesta: { connect: { id: tipoRespuestaId } },
+          dependencia: { connect: { id: dependenciaId } },
+          edad,
+          genero,
+        };
+
+        // Verificar si hay un comentario y crearlo si existe
+        if (comentario && comentario.respuestaComentario) {
+          respuestaData.comentario = {
+            create: {
+              respuestaComentario: comentario.respuestaComentario,
+              dependencia: { connect: { id: dependenciaId } },
+              formulario: { connect: { id: formularioId } },
+            },
+          };
+        }
+
+        const respuesta = await this.prisma.respuesta.create({
+          data: respuestaData,
+          include: {
+            comentario: true,
+            tipoRespuesta: true,
+          },
+        });
+
+        return respuesta;
+      },
+    );
+
+    const respuestas = await Promise.all(respuestasPromises);
+
+    return respuestas;
+  }
+
+  async buscarRespuestas(
+    preguntaId: number[],
+    dependenciaId: number[],
+    formularioId: number,
+  ): Promise<Respuesta[]> {
     return this.prisma.respuesta.findMany({
       where: {
         preguntaId: {
-          in: preguntaIds,
+          in: preguntaId,
         },
         dependenciaId: {
-          in: dependenciaIds,
+          in: dependenciaId,
         },
         formularioId: {
-          in: formularioIds,
+          in: formularioId,
         },
       },
       include: {
@@ -25,59 +96,61 @@ export class RespuestasService {
       },
     });
   }
-  
-  async createRespuestas(createRespuestaDto: CreateRespuestaDto) {
-    if (!createRespuestaDto || !createRespuestaDto.preguntasRespuestas) {
-      throw new Error('Invalid createRespuestaDto');
-    }
-  
-    const respuestasPromises = createRespuestaDto.preguntasRespuestas.map(async (preguntaRespuesta) => {
-      const { preguntaId, comentario, formularioId, tipoRespuestaId, dependenciaId, edad, genero } = preguntaRespuesta;
-  
-      // Verificar si la dependencia existe antes de crear la respuesta
-      const dependencia = await this.prisma.dependencia.findUnique({
-        where: { id: dependenciaId },
-      });
-  
-      if (!dependencia) {
-        // Manejar el caso en el que la dependencia no existe (opcional)
-        throw new Error(`La dependencia con ID ${dependenciaId} no fue encontrada`);
-      }
-  
-      const respuestaData: any = { // Usamos 'any' para flexibilizar el tipo
-        pregunta: { connect: { id: preguntaId } },
-        formulario: { connect: { id: formularioId } },
-        tipoRespuesta: { connect: { id: tipoRespuestaId } },
-        dependencia: { connect: { id: dependenciaId } },
-        edad,
-        genero,
-      };
-  
-      // Verificar si hay un comentario y crearlo si existe
-      if (comentario && comentario.respuestaComentario) {
-        respuestaData.comentario = {
-          create: {
-            respuestaComentario: comentario.respuestaComentario,
-            dependencia: { connect: { id: dependenciaId } },
-            formulario: { connect: { id: formularioId } },
-          },
-        };
-      }
-  
-      const respuesta = await this.prisma.respuesta.create({
-        data: respuestaData,
-        include: {
-          comentario: true,
-          tipoRespuesta: true,
+
+  async buscarRespuestasPorPreguntaYDependencia(
+    preguntaId: number[],
+    dependenciaId: number[],
+  ): Promise<Respuesta[]> {
+    return this.prisma.respuesta.findMany({
+      where: {
+        preguntaId: {
+          in: preguntaId,
         },
-      });
-  
-      return respuesta;
+        dependenciaId: {
+          in: dependenciaId,
+        },
+      },
+      include: {
+        comentario: true,
+      },
     });
-  
-    const respuestas = await Promise.all(respuestasPromises);
-  
-    return respuestas;
+  }
+
+  async buscarRespuestasPorPreguntaYFormulario(
+    preguntaId: number[],
+    formularioId: number,
+  ): Promise<Respuesta[]> {
+    return this.prisma.respuesta.findMany({
+      where: {
+        preguntaId: {
+          in: preguntaId,
+        },
+        formularioId: {
+          in: formularioId,
+        },
+      },
+      include: {
+        comentario: true,
+      },
+    });
+  }
+  async buscarRespuestasPorDependenciaYFormulario(
+    dependenciaId: number[],
+    formularioId: number,
+  ): Promise<Respuesta[]> {
+    return this.prisma.respuesta.findMany({
+      where: {
+        dependenciaId: {
+          in: dependenciaId,
+        },
+        formularioId: {
+          in: formularioId,
+        },
+      },
+      include: {
+        comentario: true,
+      },
+    });
   }
 
   async findRespuestaById(id: number): Promise<Respuesta> {
@@ -90,7 +163,9 @@ export class RespuestasService {
     });
   }
 
-    async getRespuestasByPreguntaIds(preguntaIds: number[]): Promise<Respuesta[]> {
+  async getRespuestasByPreguntaIds(
+    preguntaIds: number[],
+  ): Promise<Respuesta[]> {
     return this.prisma.respuesta.findMany({
       where: {
         preguntaId: {
@@ -102,8 +177,10 @@ export class RespuestasService {
       },
     });
   }
-  
-  async getRespuestasByDependenciaIds(dependenciaIds: number[]): Promise<Respuesta[]> {
+
+  async getRespuestasByDependenciaIds(
+    dependenciaIds: number[],
+  ): Promise<Respuesta[]> {
     return this.prisma.respuesta.findMany({
       where: {
         dependenciaId: {
@@ -115,8 +192,10 @@ export class RespuestasService {
       },
     });
   }
-  
-  async getRespuestasByFormularioId(formularioId: number): Promise<Respuesta[]> {
+
+  async getRespuestasByFormularioId(
+    formularioId: number,
+  ): Promise<Respuesta[]> {
     return this.prisma.respuesta.findMany({
       where: {
         formularioId: formularioId,
@@ -135,7 +214,6 @@ export class RespuestasService {
     });
     return respuestas;
   }
-
 
   async remove(id: number): Promise<Respuesta> {
     const deletedRespuesta = await this.prisma.respuesta.delete({

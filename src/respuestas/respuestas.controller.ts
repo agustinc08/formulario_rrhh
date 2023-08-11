@@ -16,33 +16,84 @@ import { Respuesta } from '@prisma/client';
 export class RespuestaController {
   constructor(private readonly respuestaService: RespuestasService) {}
 
-  @Get(':preguntaId/:dependenciaId/:formularioId')
-  async buscarRespuestas(
-    @Param('preguntaId') preguntaId: string,
-    @Param('dependenciaId') dependenciaId: string,
-    @Param('formularioId') formularioId: string,
-  ): Promise<Respuesta[]> {
-    const idPregunta = parseInt(preguntaId, 10);
-    const idDependencia = parseInt(dependenciaId, 10);
-    const idFormulario = parseInt(formularioId, 10);
-  
-    console.log('Pregunta ID:', idPregunta);
-    console.log('Dependencia ID:', idDependencia);
-    console.log('Formulario ID:', idFormulario);
-  
-    return this.respuestaService.buscarRespuestas(
-      [idPregunta],
-      [idDependencia],
-      [idFormulario],
-    );
-  }
-  
   @Post()
   async createRespuesta(@Body() createRespuestaDto: CreateRespuestaDto) {
     const respuesta = await this.respuestaService.createRespuestas(
       createRespuestaDto,
     );
     return respuesta;
+  }
+
+  @Get(':preguntaIds/:dependenciaIds/:formularioId')
+  async buscarRespuestas(
+    @Param('preguntaIds') preguntaIds: string,
+    @Param('dependenciaIds') dependenciaIds: string,
+    @Param('formularioId') formularioId: string,
+  ): Promise<Respuesta[]> {
+    const idPreguntas = preguntaIds.split(',').map(id => parseInt(id, 10));
+    const idDependencias = dependenciaIds.split(',').map(id => parseInt(id, 10));
+    const idFormulario = parseInt(formularioId, 10);
+  
+    console.log('Pregunta IDs:', idPreguntas);
+    console.log('Dependencia IDs:', idDependencias);
+    console.log('Formulario ID:', idFormulario);
+  
+    return this.respuestaService.buscarRespuestas(
+      idPreguntas,
+      idDependencias,
+      idFormulario,
+    );
+  }
+
+  @Get(':preguntaIds/:dependenciaIds')
+  async buscarRespuestasPorPreguntaYDependencia(
+    @Param('preguntaIds') preguntaIds: string,
+    @Param('dependenciaIds') dependenciaIds: string,
+  ): Promise<Respuesta[]> {
+    const idPreguntas = preguntaIds.split(',').map(id => parseInt(id, 10));
+    const idDependencias = dependenciaIds.split(',').map(id => parseInt(id, 10));
+  
+    console.log('Pregunta IDs:', idPreguntas);
+    console.log('Dependencia IDs:', idDependencias);
+  
+    return this.respuestaService.buscarRespuestasPorPreguntaYDependencia(
+      idPreguntas,
+      idDependencias,
+    );
+  }
+
+  @Get(':preguntaIds/:formularioId')
+  async buscarRespuestasPorPreguntaYFormulario(
+    @Param('preguntaIds') preguntaIds: string,
+    @Param('formularioId') formularioId: string,
+  ): Promise<Respuesta[]> {
+    const idPreguntas = preguntaIds.split(',').map(id => parseInt(id, 10));
+    const idFormulario = parseInt(formularioId, 10);
+  
+    console.log('Pregunta IDs:', idPreguntas);
+    console.log('Formulario ID:', idFormulario);
+  
+    return this.respuestaService.buscarRespuestasPorPreguntaYFormulario(
+      idPreguntas,
+      idFormulario,
+    );
+  }
+
+  @Get(':dependenciasId/:formularioId')
+  async buscarRespuestasPorDependenciaYFormulario(
+    @Param('dependenciasId') dependenciasId: string,
+    @Param('formularioId') formularioId: string,
+  ): Promise<Respuesta[]> {
+    const idDependencias = dependenciasId.split(',').map(id => parseInt(id, 10));
+    const idFormulario = parseInt(formularioId, 10);
+  
+    console.log('Dependencia IDs:', idDependencias);
+    console.log('Formulario ID:', idFormulario);
+  
+    return this.respuestaService.buscarRespuestasPorPreguntaYFormulario(
+      idDependencias,
+    idFormulario,
+    );
   }
 
   @Get('pregunta')
@@ -68,7 +119,7 @@ export class RespuestaController {
     return this.respuestaService.getRespuestasByFormularioId(parseInt(formularioId, 10));
   }
   
-   @Get('boquitaelmasgrande')
+   @Get()
   findAll() {
     return this.respuestaService.findAll();
   }
