@@ -114,4 +114,18 @@ export class FormularioService {
   async delete(id: number): Promise<Formulario | null> {
     return this.prisma.formulario.delete({ where: { id } });
   }
+
+  async getTiposRespuestaPorFormulario(formularioId: number) {
+    try {
+      const id = parseInt(formularioId.toString());
+  
+    const tiposRespuesta = await this.prisma.formulario
+      .findUnique({ where: { id } })
+      .tiposRespuesta();
+  
+    return tiposRespuesta;
+  } catch (error) {
+    throw new Error(`Error al obtener los tipos de respuesta del formulario: ${error.message}`);
+  }
+  }
 }

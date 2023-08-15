@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, Respuesta } from '@prisma/client';
+import { Prisma, Respuesta, TipoRespuesta } from '@prisma/client';
 import { CreateRespuestaDto } from './dto/create-respuesta.dto';
 import { PrismaService } from 'src/prisma.service';
 
@@ -220,5 +220,35 @@ export class RespuestasService {
       where: { id },
     });
     return deletedRespuesta;
+  }
+
+  async buscarTipoRespuestaPorDependencia(dependenciaId: number): Promise<TipoRespuesta[]> {
+    const respuestas = await this.prisma.respuesta.findMany({
+      where: {
+        dependenciaId: dependenciaId,
+      },
+      select: {
+        tipoRespuesta: true,
+      },
+    });
+  
+    return respuestas.map(respuesta => respuesta.tipoRespuesta);
+  }
+  
+  async buscarTipoRespuestaPorPregunta(preguntaId: number): Promise<TipoRespuesta[]> {
+    return this.prisma.pregunta.findUnique({
+      where: { id: preguntaId },
+      include: { tipoRespuesta: true }, // Incluye el tipo de respuesta asociado
+    }).then(pregunta => pregunta?.tipoRespuesta ? [pregunta.tipoRespuesta] : []);
+  }
+ 
+  async buscarTipoRespuestaPorFormulario(formularioId: number): Promise<TipoRespuesta[]> {
+    return this.prisma.tipoRespuesta.findMany({
+      where: {
+        formularioId: {
+          equals: formularioId,
+        },
+      },
+    });
   }
 }

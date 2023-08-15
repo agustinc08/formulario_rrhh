@@ -93,4 +93,21 @@ export class FormularioController {
   async delete(@Param('id') id: string): Promise<Formulario | null> {
     return this.formularioService.delete(Number(id));
   }
+
+  @Get(':formularioId/tiposRespuesta')
+  async obtenerTiposRespuestaPorFormulario(
+    @Param('formularioId') formularioId: number,
+  ) {
+    try {
+      const tiposRespuesta = await this.formularioService.getTiposRespuestaPorFormulario(
+        formularioId,
+      );
+      return tiposRespuesta;
+    } catch (error) {
+      throw new Error(
+        `Error al obtener los tipos de respuesta del formulario: ${error.message}`,
+      );
+    }
+  }
+
 }

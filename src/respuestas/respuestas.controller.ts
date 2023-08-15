@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { CreateRespuestaDto } from './dto/create-respuesta.dto';
 import { RespuestasService } from './respuestas.service';
-import { Respuesta } from '@prisma/client';
+import { Respuesta, TipoRespuesta } from '@prisma/client';
 
 @Controller('respuestas')
 export class RespuestaController {
@@ -24,7 +24,7 @@ export class RespuestaController {
     return respuesta;
   }
 
-  @Get(':preguntaIds/:dependenciaIds/:formularioId')
+  @Get('buscar/:preguntaIds/:dependenciaIds/:formularioId')
   async buscarRespuestas(
     @Param('preguntaIds') preguntaIds: string,
     @Param('dependenciaIds') dependenciaIds: string,
@@ -45,7 +45,7 @@ export class RespuestaController {
     );
   }
 
-  @Get(':preguntaIds/:dependenciaIds')
+  @Get('buscarpd/:preguntaIds/:dependenciaIds')
   async buscarRespuestasPorPreguntaYDependencia(
     @Param('preguntaIds') preguntaIds: string,
     @Param('dependenciaIds') dependenciaIds: string,
@@ -62,11 +62,11 @@ export class RespuestaController {
     );
   }
 
-  @Get(':preguntaIds/:formularioId')
-  async buscarRespuestasPorPreguntaYFormulario(
-    @Param('preguntaIds') preguntaIds: string,
-    @Param('formularioId') formularioId: string,
-  ): Promise<Respuesta[]> {
+  @Get('buscarpf/:preguntaIds/:formularioId')
+async buscarRespuestasPorPreguntaYFormulario(
+  @Param('preguntaIds') preguntaIds: string,
+  @Param('formularioId') formularioId: string,
+): Promise<Respuesta[]> {
     const idPreguntas = preguntaIds.split(',').map(id => parseInt(id, 10));
     const idFormulario = parseInt(formularioId, 10);
   
@@ -79,7 +79,7 @@ export class RespuestaController {
     );
   }
 
-  @Get(':dependenciasId/:formularioId')
+  @Get('buscardf/:dependenciasId/:formularioId')
   async buscarRespuestasPorDependenciaYFormulario(
     @Param('dependenciasId') dependenciasId: string,
     @Param('formularioId') formularioId: string,
@@ -90,7 +90,7 @@ export class RespuestaController {
     console.log('Dependencia IDs:', idDependencias);
     console.log('Formulario ID:', idFormulario);
   
-    return this.respuestaService.buscarRespuestasPorPreguntaYFormulario(
+    return this.respuestaService.buscarRespuestasPorDependenciaYFormulario(
       idDependencias,
     idFormulario,
     );
@@ -134,5 +134,20 @@ export class RespuestaController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.respuestaService.remove(+id);
+  }
+
+  @Get('buscarTipoRespuestaPorDependencia/:dependenciaId')
+  async buscarTipoRespuestaPorDependencia(@Param('dependenciaId') dependenciaId: string): Promise<TipoRespuesta[]> {
+    return this.respuestaService.buscarTipoRespuestaPorDependencia(parseInt(dependenciaId, 10));
+  }
+
+  @Get('buscarTipoRespuestaPorPregunta/:preguntaId')
+  async buscarTipoRespuestaPorPregunta(@Param('preguntaId') preguntaId: string): Promise<TipoRespuesta[]> {
+    return this.respuestaService.buscarTipoRespuestaPorPregunta(parseInt(preguntaId, 10));
+  }
+
+  @Get('buscarTipoRespuestaPorFormulario/:formularioId')
+  async buscarTipoRespuestaPorFormulario(@Param('formularioId') formularioId: string): Promise<TipoRespuesta[]> {
+    return this.respuestaService.buscarTipoRespuestaPorFormulario(parseInt(formularioId, 10));
   }
 }
