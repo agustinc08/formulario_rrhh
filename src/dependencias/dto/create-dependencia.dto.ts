@@ -1,6 +1,8 @@
-import { Rol } from "@prisma/client";
+import { Edificio, Polo, Rol,  } from "@prisma/client";
 
 export class CreateDependenciaDto {
     nombreDependencia: string;
-    rol: Rol
+    rol: Rol;
+    polo: Polo;
+    edificio: Edificio;
   }

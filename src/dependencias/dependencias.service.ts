@@ -9,7 +9,7 @@ export class DependenciasService {
   constructor(private prisma: PrismaService) {}
   
   async create(createDependenciaDto: CreateDependenciaDto): Promise<Dependencia> {
-    const { nombreDependencia, rol } = createDependenciaDto;
+    const { nombreDependencia, rol, polo, edificio } = createDependenciaDto;
   
     // Verificar si ya existe una dependencia con el mismo nombre
     const existingDependencia = await this.prisma.dependencia.findFirst({
@@ -32,6 +32,8 @@ export class DependenciasService {
     const data: Prisma.DependenciaCreateInput = {
       nombreDependencia,
       rol,
+      polo,
+      edificio
     };
   
     // Utilizar createMany() para insertar la nueva dependencia con el nuevo valor de id

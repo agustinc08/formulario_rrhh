@@ -29,6 +29,8 @@ model Dependencia {
   comentarios       Comentario[]
   formularios       Formulario[]
   rol               Rol          @default(dependencia)
+  polo              Polo
+  edificio          Edificio
 }
 
 model Clave {
@@ -130,6 +132,17 @@ enum Genero {
   OTRO
 }
 
+enum Polo {
+  LAVALLE
+  INMIGRANTES
+}
+
+enum Edificio{
+  Lavalle_1220
+  Talcahuano_790
+  Uruguay_910
+}
+
 enum Edad {
   DESDE_18_A_45
   MAS_45
@@ -137,5 +150,6 @@ enum Edad {
 
 enum Rol {
   dependencia
+  usuario
   admin
 }
