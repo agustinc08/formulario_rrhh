@@ -139,8 +139,12 @@ enum Polo {
 
 enum Edificio{
   Lavalle_1220
+  Lalalle_1212
   Talcahuano_790
-  Uruguay_910
+  Talcahuano_490
+  Uruguay_714
+  CarlosPelegrini_algo
+  Inmigrantes_algo
 }
 
 enum Edad {

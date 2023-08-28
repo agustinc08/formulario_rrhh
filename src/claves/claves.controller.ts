@@ -24,6 +24,8 @@ export class ClavesController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateClaveDto: UpdateClaveDto) {
+    console.log('Updating clave with ID:', id);
+    console.log('UpdateClaveDto:', updateClaveDto);
     return this.clavesService.update(+id, updateClaveDto);
   }
 

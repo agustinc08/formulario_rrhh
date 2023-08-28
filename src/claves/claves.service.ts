@@ -62,23 +62,29 @@ export class ClavesService {
   }
 
   async update(id: number, updateClaveDto: UpdateClaveDto) {
-    const { dependenciaId, clave } = updateClaveDto;
-
-    const claveUpdated = await this.prisma.clave.update({
-      where: {
-        id,
-      },
-      data: {
-        dependencia: {
-          connect: {
-            id: dependenciaId,
-          },
+    console.log('Service: Updating clave with ID:', id);
+    console.log('UpdateClaveDto:', updateClaveDto);
+  
+    try {
+      const { dependenciaId, clave } = updateClaveDto;
+  
+      const claveUpdated = await this.prisma.clave.update({
+        where: {
+          id,
         },
-        clave,
-      },
-    });
-
-    return claveUpdated;
+        data: {
+          dependenciaId: dependenciaId, // Corrección aquí
+          clave,
+        },
+      });
+  
+      console.log('Service: Clave updated:', claveUpdated);
+  
+      return claveUpdated;
+    } catch (error) {
+      console.error('Service: Error updating clave:', error);
+      throw new Error('Error updating clave: ' + error.message);
+    }
   }
 
   async remove(id: number) {
