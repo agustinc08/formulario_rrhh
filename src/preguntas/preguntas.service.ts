@@ -83,6 +83,18 @@ export class PreguntasService {
 
   async update(id: number, updatePreguntaDto: UpdatePreguntaDto) {
     const { descripcion } = updatePreguntaDto;
+  
+    // Verificar si hay respuestas asociadas a la pregunta
+    const respuestasCount = await this.prisma.respuesta.count({
+      where: {
+        preguntaId: id,
+      },
+    });
+  
+    if (respuestasCount > 0) {
+      throw new Error('No se puede editar la pregunta debido a respuestas asociadas.');
+    }
+  
     return this.prisma.pregunta.update({
       where: {
         id,
@@ -91,11 +103,11 @@ export class PreguntasService {
         descripcion,
       },
       include: {
-        respuestas: true
+        respuestas: true,
       },
     });
   }
-
+  
   async remove(id: number) {
     return this.prisma.pregunta.delete({
       where: {

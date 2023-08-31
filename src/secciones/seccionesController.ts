@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Patch } from '@nestjs/common';
 import { Seccion } from '.prisma/client';
 import { SeccionesService } from './seccionesServices';
 
@@ -31,9 +31,9 @@ export class SeccionesController {
     }
 
     return this.seccionesService.buscarSeccionPorId(parsedId);
-  }11
+  }
 
-  @Put(':id')
+  @Patch(':id')
   async actualizarSeccion(
     @Param('id') id: string,
     @Body('descripcion') descripcion: string,

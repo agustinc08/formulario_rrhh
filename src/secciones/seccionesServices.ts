@@ -72,6 +72,20 @@ export class SeccionesService {
   }
 
   async actualizarSeccion(id: number, descripcion: string): Promise<Seccion> {
+    const seccion = await this.prisma.seccion.findUnique({ where: { id } });
+    
+    if (!seccion) {
+      throw new Error(`No se encontró la sección con el ID ${id}`);
+    }
+  
+    const preguntasConRespuestas = await this.prisma.respuesta.findMany({
+      where: { pregunta: { seccionId: id } }
+    });
+  
+    if (preguntasConRespuestas.length > 0) {
+      throw new Error('No se puede modificar la sección ya que tiene preguntas con respuestas.');
+    }
+  
     return this.prisma.seccion.update({
       where: { id },
       data: { descripcion },
