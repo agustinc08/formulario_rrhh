@@ -36,6 +36,16 @@ export class InicioService {
     });
   }
 
+  async verificarInicioPorFormulario(formularioId: number): Promise<Inicio | null> {
+    return this.prisma.inicio.findFirst({
+      where: {
+        formulario: {
+          id: formularioId
+        }
+      },
+    });
+  }
+
   async getInicioPorId(id: number): Promise<Inicio | null> {
     return this.prisma.inicio.findUnique({
       where: { id }, // Use the provided ID to fetch the specific inicio
@@ -63,6 +73,13 @@ export class InicioService {
       return inicio;
     } catch (error) {
       throw new Error('Error retrieving Inicio data');
-    }
+    } 
   }
+
+  async findAll() {
+    return this.prisma.inicio.findMany({
+   
+    });
+  }
+
 }

@@ -13,11 +13,12 @@ export class SeccionesService {
         descripcion: {
           equals: descripcion,
         },
+        formularioId: formularioId,
       },
     });
   
     if (seccionExistente) {
-      throw new Error('Ya existe una sección con el mismo nombre');
+      throw new Error('Ya existe una sección con el mismo nombre en este formulario');
     }
   
     return this.prisma.seccion.create({
@@ -25,9 +26,9 @@ export class SeccionesService {
         descripcion,
         formulario: {
           connect: {
-            id: formularioId
-          }
-        }
+            id: formularioId,
+          },
+        },
       },
     });
   }

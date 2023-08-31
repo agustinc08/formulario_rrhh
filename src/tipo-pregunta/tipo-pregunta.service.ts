@@ -16,10 +16,22 @@ export class TipoPreguntaService {
   }
   
   async create(data: TipoPregunta): Promise<TipoPregunta> {
+    const tipoPreguntaExistente = await this.prisma.tipoPregunta.findFirst({
+      where: {
+        descripcion: {
+          equals: data.descripcion,
+        },
+      },
+    });
+  
+    if (tipoPreguntaExistente) {
+      throw new Error('Ya existe un TipoPregunta con la misma descripción');
+    }
+  
     return this.prisma.tipoPregunta.create({
       data: {
         descripcion: data.descripcion,
-        formulario: { connect: { id: data.formularioId } },
+        formulario: { connect: { id: 1 } },
       },
     });
   }
