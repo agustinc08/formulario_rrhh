@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { Seccion } from '.prisma/client';
 import { Formulario } from '@prisma/client';
@@ -7,7 +7,10 @@ import { Formulario } from '@prisma/client';
 export class SeccionesService {
   constructor(private prisma: PrismaService) {}
 
-  async crearSeccion(formularioId: number, descripcion: string): Promise<Seccion> {
+  async crearSeccion(
+    formularioId: number,
+    descripcion: string,
+  ): Promise<Seccion> {
     const seccionExistente = await this.prisma.seccion.findFirst({
       where: {
         descripcion: {
@@ -16,11 +19,13 @@ export class SeccionesService {
         formularioId: formularioId,
       },
     });
-  
+
     if (seccionExistente) {
-      throw new Error('Ya existe una sección con el mismo nombre en este formulario');
+      throw new Error(
+        'Ya existe una sección con el mismo nombre en este formulario',
+      );
     }
-  
+
     return this.prisma.seccion.create({
       data: {
         descripcion,
@@ -42,7 +47,9 @@ export class SeccionesService {
     });
 
     // Extract the IDs of the active formularios
-    const formularioIds = formulariosActivos.map((formulario: Formulario) => formulario.id);
+    const formularioIds = formulariosActivos.map(
+      (formulario: Formulario) => formulario.id,
+    );
 
     // Get all secciones that are associated with the active formularios
     return this.prisma.seccion.findMany({
@@ -73,7 +80,7 @@ export class SeccionesService {
 
   async actualizarSeccion(id: number, descripcion: string): Promise<Seccion> {
     const seccion = await this.prisma.seccion.findUnique({ where: { id } });
-    
+  
     if (!seccion) {
       throw new Error(`No se encontró la sección con el ID ${id}`);
     }
