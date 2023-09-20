@@ -7,6 +7,22 @@ export class FormularioService {
   constructor(private readonly prisma: PrismaService) { }
   
   async create(data: Prisma.FormularioCreateInput): Promise<Formulario> {
+    // Verificar si ya existe un formulario con el mismo nombre
+    const formularioExistente = await this.prisma.formulario.findFirst({
+      where: {
+        nombre: {
+          equals: data.nombre
+        }
+      },
+    });
+
+    if (formularioExistente) {
+      throw new Error(
+        'Ya existe un formulario con el mismo nombre',
+      );
+    }
+
+    // Si no existe, crea el nuevo formulario
     return this.prisma.formulario.create({ data });
   }
   
