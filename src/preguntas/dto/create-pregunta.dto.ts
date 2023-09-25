@@ -9,6 +9,7 @@ export class CreatePreguntaDto {
   seccionId: number;
 
   tieneComentario: boolean;
+  tieneTipoPregunta: boolean;
 
   descripcionComentario: string;
 

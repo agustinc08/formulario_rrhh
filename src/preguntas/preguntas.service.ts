@@ -9,36 +9,53 @@ export class PreguntasService {
   constructor(private readonly prisma: PrismaService) { }
 
   async createPregunta(data: CreatePreguntaDto) {
-    const tipoRespuestas = await this.prisma.tipoRespuesta.findMany({
-      where: {
-        tipoPreguntaId: data.tipoPreguntaId,
+    let tipoRespuestaConnect = null; // Objeto para conectar tipoRespuesta
+  
+    if (data.tipoPreguntaId) {
+      // Solo busca tipoRespuestas si se proporciona tipoPreguntaId en data
+      const tipoRespuestas = await this.prisma.tipoRespuesta.findMany({
+        where: {
+          tipoPreguntaId: data.tipoPreguntaId,
+        },
+      });
+  
+      // Si hay tipoRespuestas, conecta solo con el primer tipoRespuesta
+      if (tipoRespuestas.length > 0) {
+        tipoRespuestaConnect = {
+          connect: {
+            id: tipoRespuestas[0].id,
+          },
+        };
+      }
+    }
+  
+    // Define los datos de la pregunta a crear
+    const preguntaData = {
+      descripcion: data.descripcion,
+      tieneComentario: data.tieneComentario,
+      descripcionComentario: data.descripcionComentario,
+      seccion: {
+        connect: { id: data.seccionId },
       },
-    });
+      formulario: {
+        connect: { id: data.formularioId },
+      },
+    };
   
-    const tipoRespuestaId = tipoRespuestas[0]?.id; // Obtén el primer tipoRespuestaId que coincida
+    // Solo si tipoPreguntaId está presente, establece tipoPregunta
+    if (data.tipoPreguntaId) {
+      preguntaData["tipoPregunta"] = {
+        connect: { id: data.tipoPreguntaId },
+      };
+    }
   
-    if (!tipoRespuestaId) {
-      throw new Error('No se encontró ningún tipoRespuesta para el tipoPregunta especificado');
+    // Solo si tipoRespuestaConnect está definido, establece tipoRespuesta
+    if (tipoRespuestaConnect) {
+      preguntaData["tipoRespuesta"] = tipoRespuestaConnect;
     }
   
     return this.prisma.pregunta.create({
-      data: {
-        descripcion: data.descripcion,
-        tieneComentario: data.tieneComentario,
-        descripcionComentario: data.descripcionComentario,
-        tipoPregunta: {
-          connect: { id: data.tipoPreguntaId },
-        },
-        seccion: {
-          connect: { id: data.seccionId },
-        },
-        formulario: {
-          connect: { id: data.formularioId },
-        },
-        tipoRespuesta: {
-          connect: { id: tipoRespuestaId },
-        },
-      },
+      data: preguntaData,
     });
   }
   
