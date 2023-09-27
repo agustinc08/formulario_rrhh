@@ -11,52 +11,51 @@ export class RespuestasService {
     if (!createRespuestaDto || !createRespuestaDto.preguntasRespuestas) {
       throw new Error('Invalid createRespuestaDto');
     }
-
+  
     const respuestasPromises = createRespuestaDto.preguntasRespuestas.map(
       async (preguntaRespuesta) => {
         const {
           preguntaId,
           comentario,
           formularioId,
-          tipoRespuestaId,
+          tipoRespuestaId, // Puede ser null
           dependenciaId,
           edad,
           genero,
         } = preguntaRespuesta;
-
+  
         // Verificar si la dependencia existe antes de crear la respuesta
         const dependencia = await this.prisma.dependencia.findUnique({
           where: { id: dependenciaId },
         });
-
+  
         if (!dependencia) {
           // Manejar el caso en el que la dependencia no existe (opcional)
           throw new Error(
             `La dependencia con ID ${dependenciaId} no fue encontrada`,
           );
         }
-
+  
         const respuestaData: any = {
-          // Usamos 'any' para flexibilizar el tipo
           pregunta: { connect: { id: preguntaId } },
           formulario: { connect: { id: formularioId } },
-          tipoRespuesta: { connect: { id: tipoRespuestaId } },
           dependencia: { connect: { id: dependenciaId } },
           edad,
           genero,
-        };
-
-        // Verificar si hay un comentario y crearlo si existe
-        if (comentario && comentario.respuestaComentario) {
-          respuestaData.comentario = {
+          comentario: {
             create: {
-              respuestaComentario: comentario.respuestaComentario,
+              respuestaComentario: comentario?.respuestaComentario || '', // Si no hay comentario, asigna una cadena vacía
               dependencia: { connect: { id: dependenciaId } },
               formulario: { connect: { id: formularioId } },
             },
-          };
+          },
+        };
+  
+        // Verificar si hay un tipo de respuesta y conectarlo si existe
+        if (tipoRespuestaId !== null) {
+          respuestaData.tipoRespuesta = { connect: { id: tipoRespuestaId } };
         }
-
+  
         const respuesta = await this.prisma.respuesta.create({
           data: respuestaData,
           include: {
@@ -64,15 +63,16 @@ export class RespuestasService {
             tipoRespuesta: true,
           },
         });
-
+  
         return respuesta;
       },
     );
-
+  
     const respuestas = await Promise.all(respuestasPromises);
-
+  
     return respuestas;
   }
+  
 
   async buscarRespuestas(
     preguntaId: number[],

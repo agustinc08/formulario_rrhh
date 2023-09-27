@@ -86,7 +86,7 @@ CREATE TABLE "Respuesta" (
     "preguntaId" INTEGER NOT NULL,
     "comentarioId" INTEGER,
     "formularioId" INTEGER NOT NULL,
-    "tipoRespuestaId" INTEGER NOT NULL,
+    "tipoRespuestaId" INTEGER,
     "dependenciaId" INTEGER NOT NULL,
     "edad" "Edad",
     "genero" "Genero",
@@ -170,7 +170,7 @@ ALTER TABLE "Respuesta" ADD CONSTRAINT "Respuesta_comentarioId_fkey" FOREIGN KEY
 ALTER TABLE "Respuesta" ADD CONSTRAINT "Respuesta_formularioId_fkey" FOREIGN KEY ("formularioId") REFERENCES "Formulario"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Respuesta" ADD CONSTRAINT "Respuesta_tipoRespuestaId_fkey" FOREIGN KEY ("tipoRespuestaId") REFERENCES "TipoRespuesta"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Respuesta" ADD CONSTRAINT "Respuesta_tipoRespuestaId_fkey" FOREIGN KEY ("tipoRespuestaId") REFERENCES "TipoRespuesta"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Respuesta" ADD CONSTRAINT "Respuesta_dependenciaId_fkey" FOREIGN KEY ("dependenciaId") REFERENCES "Dependencia"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
