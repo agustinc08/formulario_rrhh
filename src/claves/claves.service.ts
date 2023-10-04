@@ -61,7 +61,7 @@ export class ClavesService {
     return clave;
   }
 
-  async update(id: number, updateClaveDto: UpdateClaveDto) {
+  async update(id: number,updateClaveDto: UpdateClaveDto) {
     console.log('Service: Updating clave with ID:', id);
     console.log('UpdateClaveDto:', updateClaveDto);
   

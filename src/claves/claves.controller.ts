@@ -22,11 +22,11 @@ export class ClavesController {
     return this.clavesService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateClaveDto: UpdateClaveDto) {
+  @Patch(':id/:dependenciaId')
+  update(@Param('id') id: string,@Body() updateClaveDto: UpdateClaveDto) {
     console.log('Updating clave with ID:', id);
     console.log('UpdateClaveDto:', updateClaveDto);
-    return this.clavesService.update(+id, updateClaveDto);
+    return this.clavesService.update(+id,updateClaveDto);
   }
 
   @Delete(':id')
