@@ -88,7 +88,7 @@ export class RespuestasService {
           in: dependenciaId,
         },
         formularioId: {
-          in: formularioId,
+          in: [formularioId], // Convierte el número en un array de un solo elemento
         },
       },
       include: {
@@ -126,7 +126,7 @@ export class RespuestasService {
           in: preguntaId,
         },
         formularioId: {
-          in: formularioId,
+          in: [formularioId], // Convierte el número en un array de un solo elemento
         },
       },
       include: {
@@ -144,7 +144,7 @@ export class RespuestasService {
           in: dependenciaId,
         },
         formularioId: {
-          in: formularioId,
+          in: [formularioId], // Convierte el número en un array de un solo elemento
         },
       },
       include: {
