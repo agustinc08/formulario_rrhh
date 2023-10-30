@@ -1,12 +1,10 @@
 generator client {
   provider = "prisma-client-js"
 }
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
 model Formulario {
   id             Int             @id @default(autoincrement())
   nombre         String
@@ -20,7 +18,6 @@ model Formulario {
   dependencias   Dependencia[]
   secciones      Seccion[]
 }
-
 model Dependencia {
   id                Int          @id @default(autoincrement())
   nombreDependencia String
@@ -32,14 +29,12 @@ model Dependencia {
   polo              Polo
   edificio          Edificio
 }
-
 model Clave {
   id            Int         @id @default(autoincrement())
   dependenciaId Int
   dependencia   Dependencia @relation(fields: [dependenciaId], references: [id])
   clave         String
 }
-
 model Inicio {
   id                      Int          @id @default(autoincrement())
   tituloPrincipal         String
@@ -49,7 +44,6 @@ model Inicio {
   formulario              Formulario?  @relation(fields: [formularioId], references: [id])
   formularioId            Int?
 }
-
 model Seccion {
   id           Int        @id @default(autoincrement())
   descripcion  String
@@ -57,7 +51,6 @@ model Seccion {
   formulario   Formulario @relation(fields: [formularioId], references: [id])
   formularioId Int
 }
-
 model Pregunta {
   id                    Int            @id @default(autoincrement())
   descripcion           String
@@ -76,7 +69,6 @@ model Pregunta {
   formularioId          Int
   respuestas            Respuesta[]
 }
-
 model Respuesta {
   id              Int           @id @default(autoincrement())
   createdAt       DateTime      @default(now())
@@ -86,14 +78,13 @@ model Respuesta {
   comentarioId    Int?
   formulario      Formulario    @relation(fields: [formularioId], references: [id])
   formularioId    Int
-  tipoRespuesta   TipoRespuesta? @relation(fields: [tipoRespuestaId], references: [id])
-  tipoRespuestaId Int?
+  tipoRespuesta   TipoRespuesta @relation(fields: [tipoRespuestaId], references: [id])
+  tipoRespuestaId Int
   dependencia     Dependencia   @relation(fields: [dependenciaId], references: [id])
   dependenciaId   Int
   edad            Edad?
   genero          Genero?
 }
-
 model Comentario {
   id            Int         @id @default(autoincrement())
   descripcion   String?
@@ -105,7 +96,6 @@ model Comentario {
   formulario    Formulario? @relation(fields: [formularioId], references: [id])
   formularioId  Int?
 }
-
 model TipoPregunta {
   id            Int             @id @default(autoincrement())
   descripcion   String
@@ -114,7 +104,6 @@ model TipoPregunta {
   preguntas     Pregunta[]
   tipoRespuesta TipoRespuesta[]
 }
-
 model TipoRespuesta {
   id             Int          @id @default(autoincrement())
   descripcion    String
@@ -125,13 +114,11 @@ model TipoRespuesta {
   formularioId   Int
   respuestas     Respuesta[]
 }
-
 enum Genero {
   MASCULINO
   FEMENINO
   OTRO
 }
-
 enum Polo {
   LAVALLE
   INMIGRANTES
@@ -151,7 +138,6 @@ enum Edad {
   DESDE_18_A_45
   MAS_45
 }
-
 enum Rol {
   dependencia
   usuario

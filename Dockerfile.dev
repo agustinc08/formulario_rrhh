@@ -1,6 +1,6 @@
 FROM node:19
 WORKDIR /app
 COPY ./package.json ./
-RUN yarn
+RUN yarn 
 COPY . .
-CMD ["yarn", "dev"]
+CMD ["yarn", "start:dev"]

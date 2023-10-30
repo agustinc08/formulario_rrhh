@@ -1,5 +1,6 @@
 import { INestApplication, Injectable, OnModuleInit } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
+type BeforeExitEvent = 'beforeExit';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
@@ -7,9 +8,9 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
         await this.$connect();
     }
 
-    async enableShutdownHooks(app: INestApplication) {
-        this.$on('beforeExit', async () => {
-            await app.close();
-        });
-    }
+    // async enableShutdownHooks(app: INestApplication) {
+    //     this.$on<BeforeExitEvent>('beforeExit', async () => {
+    //         await app.close();
+    //     });
+    // }
 }
