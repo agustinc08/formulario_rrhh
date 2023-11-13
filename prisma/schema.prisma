@@ -78,8 +78,8 @@ model Respuesta {
   comentarioId    Int?
   formulario      Formulario    @relation(fields: [formularioId], references: [id])
   formularioId    Int
-  tipoRespuesta   TipoRespuesta @relation(fields: [tipoRespuestaId], references: [id])
-  tipoRespuestaId Int
+  tipoRespuesta   TipoRespuesta? @relation(fields: [tipoRespuestaId], references: [id])
+  tipoRespuestaId Int?
   dependencia     Dependencia   @relation(fields: [dependenciaId], references: [id])
   dependenciaId   Int
   edad            Edad?

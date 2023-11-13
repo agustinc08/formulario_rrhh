@@ -18,7 +18,7 @@ export class RespuestasService {
           preguntaId,
           comentario,
           formularioId,
-          tipoRespuestaId, // Puede ser null
+          tipoRespuestaId,
           dependenciaId,
           edad,
           genero,
@@ -35,7 +35,6 @@ export class RespuestasService {
             `La dependencia con ID ${dependenciaId} no fue encontrada`,
           );
         }
-  
         const respuestaData: any = {
           pregunta: { connect: { id: preguntaId } },
           formulario: { connect: { id: formularioId } },
@@ -44,18 +43,18 @@ export class RespuestasService {
           genero,
           comentario: {
             create: {
-              respuestaComentario: comentario?.respuestaComentario || '', // Si no hay comentario, asigna una cadena vacía
+              respuestaComentario: comentario?.respuestaComentario || '',
               dependencia: { connect: { id: dependenciaId } },
               formulario: { connect: { id: formularioId } },
             },
           },
         };
-  
-        // Verificar si hay un tipo de respuesta y conectarlo si existe
+        
+        // Añade tipoRespuesta solo si tipoRespuestaId no es null
         if (tipoRespuestaId !== null) {
           respuestaData.tipoRespuesta = { connect: { id: tipoRespuestaId } };
         }
-  
+        
         const respuesta = await this.prisma.respuesta.create({
           data: respuestaData,
           include: {
@@ -63,7 +62,7 @@ export class RespuestasService {
             tipoRespuesta: true,
           },
         });
-  
+        
         return respuesta;
       },
     );
