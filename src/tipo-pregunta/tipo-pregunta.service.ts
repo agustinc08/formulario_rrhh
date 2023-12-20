@@ -16,6 +16,11 @@ export class TipoPreguntaService {
   }
   
   async create(data: TipoPregunta): Promise<TipoPregunta> {
+    // Validar si la descripción está vacía
+    if (!data.descripcion) {
+      throw new Error('La descripción no puede estar vacía');
+    }
+  
     const tipoPreguntaExistente = await this.prisma.tipoPregunta.findFirst({
       where: {
         descripcion: {

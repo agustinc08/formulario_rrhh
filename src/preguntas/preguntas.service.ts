@@ -18,6 +18,7 @@ export class PreguntasService {
           tipoPreguntaId: data.tipoPreguntaId,
         },
       });
+
   
       // Si hay tipoRespuestas, conecta solo con el primer tipoRespuesta
       if (tipoRespuestas.length > 0) {
@@ -50,9 +51,13 @@ export class PreguntasService {
     }
   
     // Solo si tipoRespuestaConnect está definido, establece tipoRespuesta
-    if (tipoRespuestaConnect) {
-      preguntaData["tipoRespuesta"] = tipoRespuestaConnect;
-    }
+      // Verifica si hay tipoRespuestas asociadas a la pregunta
+      if (tipoRespuestaConnect) {
+        preguntaData["tipoRespuesta"] = tipoRespuestaConnect;
+      } else {
+        // Si no hay tipoRespuesta y tieneTipoPregunta, muestra un mensaje o maneja el error según tus necesidades
+        throw new Error("La opción seleccionada tieneTipoPregunta pero no tiene un tipoRespuesta asignado.");
+      }
   
     return this.prisma.pregunta.create({
       data: preguntaData,

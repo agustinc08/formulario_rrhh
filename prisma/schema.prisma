@@ -5,6 +5,7 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 model Formulario {
   id             Int             @id @default(autoincrement())
   nombre         String
@@ -126,16 +127,17 @@ enum Polo {
 
 enum Edificio{
   Lavalle_1220
-  Lalalle_1212
-  Talcahuano_790
+  Lavalle_1212
   Talcahuano_490
+  Talcahuano_550
   Uruguay_714
-  CarlosPelegrini_algo
-  Inmigrantes_algo
+  CarlosPelegrini_685
+  Inmigrantes_1950
 }
 
 enum Edad {
   DESDE_18_A_45
+  
   MAS_45
 }
 enum Rol {
