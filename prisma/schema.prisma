@@ -137,9 +137,9 @@ enum Edificio{
 
 enum Edad {
   DESDE_18_A_45
-  
   MAS_45
 }
+
 enum Rol {
   dependencia
   usuario

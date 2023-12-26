@@ -52,6 +52,12 @@ export class InicioService {
     });
   }
 
+  async updateInicio(id: number, data: any) {
+    return this.prisma.inicio.update({
+      where: { id: Number(id) }, // Ensure id is treated as a number
+      data,
+    });
+  }
   async getActiveInicio(): Promise<Inicio | null> {
     try {
       const inicio = await this.prisma.inicio.findFirst({

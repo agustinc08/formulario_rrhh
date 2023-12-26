@@ -56,12 +56,14 @@ export class PreguntasService {
         preguntaData["tipoRespuesta"] = tipoRespuestaConnect;
       } else {
         // Si no hay tipoRespuesta y tieneTipoPregunta, muestra un mensaje o maneja el error según tus necesidades
-        throw new Error("La opción seleccionada tieneTipoPregunta pero no tiene un tipoRespuesta asignado.");
+        if (data.tieneTipoPregunta) {
+          throw new Error("La opción seleccionada tiene Tipo Pregunta pero no tiene un tipo Respuesta asignado.");
+        }
       }
-  
-    return this.prisma.pregunta.create({
-      data: preguntaData,
-    });
+      
+      return this.prisma.pregunta.create({
+        data: preguntaData,
+      });
   }
   
   async getPreguntasPorSeccion(seccionId: number) {

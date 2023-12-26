@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Put } from '@nestjs/common';
 import { InicioService } from './inicio.service';
 
 @Controller('inicio')
@@ -41,6 +41,11 @@ export class InicioController {
         message: error.message,
       };
     }
+  }
+
+  @Put(':id')
+  async updateInicio(@Param('id') id: number, @Body() data: any) {
+    return this.inicioService.updateInicio(id, data);
   }
 
   @Get()
